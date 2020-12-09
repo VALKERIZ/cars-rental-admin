@@ -13,11 +13,11 @@
         </el-switch>
       </template>
       <!--操作-->
-      <template v-slot:operation="slotData">
+      <!-- <template v-slot:operation="slotData">
         <el-button type="danger" size="small" @click="edit(slotData.data)"
           >编辑</el-button
         >
-      </template>
+      </template> -->
     </TabalData>
     <AddCarsBrand
       :flagVisible.sync="dialog_show"
@@ -63,6 +63,7 @@ export default {
             width: 200,
             default: {
               deleteButton: true,
+              editButton: true,
             },
             slotName: "operation",
           },

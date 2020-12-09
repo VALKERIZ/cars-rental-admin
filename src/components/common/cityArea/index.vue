@@ -41,24 +41,29 @@ export default {
           // type
           requestData.type = jsonType[level].type;
           // 省市区的接口
-          GetCity(requestData).then((resonse) => {
-            const data = resonse.data.data;
-            // 类型
-            const type = jsonType[level].type.toUpperCase();
-            // 自定义value、label
-            data.forEach((item) => {
-              item.value = item[`${type}_CODE`];
-              item.label = item[`${type}_NAME`];
-              // 最后一层选择
-              if (level === 2) {
-                item.leaf = level >= 2;
-              }
+          GetCity(requestData)
+            .then((resonse) => {
+              const data = resonse.data.data;
+              // 类型
+              const type = jsonType[level].type.toUpperCase();
+              // 自定义value、label
+              data.forEach((item) => {
+                item.value = item[`${type}_CODE`];
+                item.label = item[`${type}_NAME`];
+                // 最后一层选择
+                if (level === 2) {
+                  item.leaf = level >= 2;
+                }
+              });
+              // 存储省市区数据
+              _this.addressData[jsonType[level].type] = data;
+              // 返回节点数据
+              resolve(data);
+            })
+            .catch((e) => {
+              console.log("GetCity error", e);
+              this.lazyLoad(node, resolve);
             });
-            // 存储省市区数据
-            _this.addressData[jsonType[level].type] = data;
-            // 返回节点数据
-            resolve(data);
-          });
           // 获取address
           if (node.level !== 0) {
             _this.getAddress(node);

@@ -175,8 +175,6 @@ export default {
   watch: {
     formItme: {
       handler(newValue) {
-        console.log("newValuenewValuenewValuenewValuenewValue");
-        console.log(newValue);
         this.initFormData();
         this.initFormFelid();
       },

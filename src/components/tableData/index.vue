@@ -232,6 +232,8 @@ export default {
         })
         .catch((error) => {
           this.loading_table = false;
+          console.log("loadData error", error);
+          this.loadData();
         });
     },
     requestData(params = "") {

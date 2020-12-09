@@ -233,10 +233,6 @@ export default {
       this.parking_data = data;
     },
   },
-  // DOM元素渲染之前（生命周期）
-  beforeMount() {},
-  // DOM元素渲染完成（生命周期）
-  mounted() {},
 };
 </script>
 <style lass="scss" scoped></style>
