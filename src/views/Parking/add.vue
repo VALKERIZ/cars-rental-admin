@@ -86,7 +86,6 @@ export default {
           label: "停车场名称",
           placeholder: "请输入停车场名称",
           prop: "parkingName",
-          width: "200px",
           validator: [
             { validator: validatePass, trigger: "change", required: true },
           ],
@@ -120,7 +119,6 @@ export default {
           label: "可停放车辆",
           placeholder: "请输入数字类型",
           prop: "carsNumber",
-          width: "200px",
           validator: [
             { validator: validateNumber, trigger: "change", required: true },
           ],
@@ -137,7 +135,6 @@ export default {
           label: "经纬度",
           placeholder: "请在地图中进行位置选择",
           prop: "lnglat",
-          width: "200px",
           disabled: true,
           required: true,
           validator: [

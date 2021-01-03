@@ -1,6 +1,7 @@
 <template>
   <el-cascader
     filterable
+    class="width-300"
     :class="{ 'cascader-input': initValueFlag }"
     :placeholder="initValue"
     v-model="value"

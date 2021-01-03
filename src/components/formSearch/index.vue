@@ -20,7 +20,6 @@
       <el-select
         filterable
         v-if="item.type === 'Select'"
-        :aaaa="item.options"
         v-model.trim="form_data[item.prop]"
         :placeholder="item.placeholder"
         :style="{ width: item.width }"

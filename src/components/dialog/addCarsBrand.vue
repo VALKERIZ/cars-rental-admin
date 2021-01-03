@@ -80,6 +80,7 @@ export default {
           type: "Input",
           label: "品牌中文",
           prop: "nameCh",
+          placeholder: "请输入品牌中文",
           validator: [
             { validator: validateName, trigger: "change", required: true },
           ],
@@ -88,6 +89,7 @@ export default {
           type: "Input",
           label: "品牌英文",
           prop: "nameEn",
+          placeholder: "请输入品牌英文",
           validator: [
             { validator: validateName, trigger: "change", required: true },
           ],

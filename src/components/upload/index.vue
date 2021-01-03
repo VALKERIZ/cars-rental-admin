@@ -76,10 +76,13 @@ export default {
     },
   },
   watch: {
-    imgUrl(newV) {
-      if (newV !== this.imageUrl) {
-        this.imageUrl = newV;
-      }
+    imgUrl: {
+      immediate: true,
+      handler(newV) {
+        if (newV !== this.imageUrl) {
+          this.imageUrl = newV;
+        }
+      },
     },
   },
 };
