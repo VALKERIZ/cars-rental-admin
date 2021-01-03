@@ -17,7 +17,7 @@
     >
       <template v-slot:logo>
         <div class="upload-img-wrap">
-          <Upload :imgUrl="logo_current" />
+          <Upload :imgUrl.sync="form_data.imgUrl" />
           <!-- <div class="upload-img">
             <img v-show="logo_current" :src="logo_current" />
           </div> -->
@@ -25,7 +25,7 @@
             <li
               v-for="item in logo"
               :key="item.id"
-              @click="logo_current = item.img"
+              @click="form_data.imgUrl = item.img"
             >
               <img :src="item.img" :alt="item.name" />
             </li>
@@ -118,8 +118,6 @@ export default {
       ],
       // 状态
       radio_disabled: this.$store.state.config.radio_disabled,
-      // 选中的LOGO
-      logo_current: "",
       // logo
       logo: [],
     };
@@ -164,7 +162,6 @@ export default {
     // },
     /** 添加 */
     add() {
-      this.form_data.imgUrl = this.logo_current;
       BrandAdd(this.form_data).then((response) => {
         this.$message({
           type: "success",
@@ -178,7 +175,6 @@ export default {
     },
     /** 修改 */
     edit() {
-      this.form_data.imgUrl = this.logo_current;
       const requestData = JSON.parse(JSON.stringify(this.form_data));
       BrandEdit(requestData).then((response) => {
         this.$message({
@@ -198,7 +194,7 @@ export default {
       }
       this.form_data.status = true;
       // 清除选中的LOGO
-      this.logo_current = "";
+      this.form_data.imgUrl = "";
     },
     close() {
       this.reset("form");
@@ -217,7 +213,6 @@ export default {
       deep: true,
       handler(newV) {
         this.form_data = newV;
-        this.logo_current = newV.imgUrl;
         this.form_data.imgUrl = newV.imgUrl;
       },
     },

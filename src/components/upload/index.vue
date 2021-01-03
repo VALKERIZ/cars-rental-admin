@@ -51,7 +51,7 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = `http://ql1yue6tv.hn-bkt.clouddn.com/${res.key}`;
-      this.$emit("update:value", this.imageUrl);
+      this.$emit("update:imgUrl", this.imageUrl);
     },
     // 上传之前
     beforeAvatarUpload(file) {

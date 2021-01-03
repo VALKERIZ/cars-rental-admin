@@ -8,7 +8,7 @@
     >
       <template v-slot:carsImg>
         <div class="upload-img-wrap">
-          <Upload :imgUrl="logo_current" />
+          <Upload :imgUrl.sync="form_data.carsImg" />
         </div>
       </template>
       <template v-slot:maintain>
@@ -239,7 +239,9 @@ export default {
   beforeMount() {
     this.getCarsBrandList();
     this.getParkingList();
-    this.getDetailed();
+    if (this.id) {
+      this.getDetailed();
+    }
   },
   mounted() {},
   methods: {
@@ -314,33 +316,34 @@ export default {
     },
     /** 获取详情 */
     getDetailed() {
-      if (!this.id) {
-        return false;
-      }
-      CarsDetailed({ id: this.id }).then((response) => {
-        const data = response.data;
-        if (!data) {
-          return false;
-        }
-        for (let key in data) {
-          if (Object.keys(this.form_data).includes(key)) {
-            this.form_data[key] = data[key];
+      CarsDetailed({ id: this.id })
+        .then((response) => {
+          const data = response.data;
+          if (!data) {
+            return false;
           }
-        }
-        console.log(this.form_data);
-        const carsAttr = JSON.parse(data.carsAttr);
-        const arr = [];
-        for (let key in carsAttr) {
-          const json = {};
-          json.attr_key = key;
-          json.attr_value = carsAttr[key];
+          for (let key in data) {
+            if (Object.keys(this.form_data).includes(key)) {
+              this.form_data[key] = data[key];
+            }
+          }
+          console.log(this.form_data);
+          const carsAttr = JSON.parse(data.carsAttr);
+          const arr = [];
+          for (let key in carsAttr) {
+            const json = {};
+            json.attr_key = key;
+            json.attr_value = carsAttr[key];
+            // { attr_key: "", attr_value: "" }
+            arr.push(json);
+          }
+          this.cars_attr = arr;
           // { attr_key: "", attr_value: "" }
-          arr.push(json);
-        }
-        this.cars_attr = arr;
-
-        // { attr_key: "", attr_value: "" }
-      });
+        })
+        .catch((e) => {
+          console.log("getDetailed error", e);
+          this.getDetailed();
+        });
     },
     /** 添加车辆属性 */
     addCarsAttr() {
