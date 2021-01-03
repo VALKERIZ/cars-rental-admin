@@ -1,7 +1,7 @@
 <template>
   <div class="parking-add">
     <VueForm
-      ref="vuForm"
+      ref="vueForm"
       :formData="form_data"
       :formItme="form_item"
       :formHandler="form_handler"
@@ -149,7 +149,7 @@ export default {
         {
           label: "确定",
           key: "submit",
-          type: "danger",
+          type: "primary",
           handler: () => this.formValidate(),
         },
         { label: "重置", key: "reset", handler: () => this.reset() },
@@ -172,7 +172,7 @@ export default {
   methods: {
     /** 确定按钮->提交表单 */
     formValidate() {
-      this.$refs.vuForm.$refs.form.validate((valid) => {
+      this.$refs.vueForm.$refs.form.validate((valid) => {
         if (valid) {
           this.id ? this.editParking() : this.addParking();
         } else {
@@ -184,7 +184,7 @@ export default {
     /** 重置按钮 */
     reset() {
       //重置表单
-      this.$refs.vuForm.$refs.form.resetFields();
+      this.$refs.vueForm.$refs.form.resetFields();
       // 清除 cityAray 的值
       this.$refs.cityArea.clear();
       // 清除地图覆盖物

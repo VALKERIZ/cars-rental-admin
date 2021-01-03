@@ -7,7 +7,7 @@ export function addressSetMapCenter(address, map) {
             let lng = result.geocodes[0].location.lng;
             map.setCenter([lng, lat]);
         } else {
-            Message.error("根据地址查询位置失败,正在重试");
+            Message.error("根据地址查询位置失败,请重试");
         }
     });
 }
