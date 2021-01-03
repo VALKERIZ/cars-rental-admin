@@ -6,6 +6,7 @@
     :show-file-list="false"
     :on-success="handleAvatarSuccess"
     :before-upload="beforeAvatarUpload"
+    v-if="show"
   >
     <img v-if="imageUrl" :src="imageUrl" class="avatar" />
     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -21,6 +22,7 @@ export default {
     return {
       imageUrl: "",
       uploadData: {},
+      show: false,
     };
   },
   beforeMount() {
@@ -39,6 +41,7 @@ export default {
           const data = response.data;
           if (data.token) {
             this.uploadData.token = data.token;
+            this.show = true;
           }
         })
         .catch((e) => {

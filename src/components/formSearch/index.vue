@@ -1,5 +1,5 @@
 <template>
-  <el-form inline ref="form" :model="form_data">
+  <el-form inline ref="form" :model="form_data" @submit.native.prevent>
     <el-form-item
       v-for="item in formItme"
       :key="item.prop"
@@ -14,6 +14,7 @@
         :placeholder="item.placeholder"
         :style="{ width: item.width }"
         :disabled="item.disabled"
+        @keyup.enter.native="search"
       ></el-input>
       <!-- Select-->
       <el-select
@@ -49,7 +50,7 @@
     </el-form-item>
     <!-- 按钮 -->
     <el-form-item>
-      <el-button type="primary" @click="search" v-if="formConfig.submitButton"
+      <el-button type="primary" @click="search" v-if="formConfig.searchButton"
         >搜索</el-button
       >
       <el-button type="danger" @click="reset" v-if="formConfig.resetButton"

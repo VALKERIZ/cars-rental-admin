@@ -5,12 +5,12 @@
   <el-dialog
     title="新增车辆品牌"
     :visible.sync="dialogVisible"
-    class="cars-dialog-center"
     @close="close"
     @opened="opened"
     :close-on-click-modal="false"
   >
     <VueForm
+      ref="vueForm"
       :formData="form_data"
       :formItme="form_item"
       :formHandler="form_handler"
@@ -56,6 +56,13 @@ export default {
     },
   },
   data() {
+    let validateName = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error("请输入品牌"));
+      } else {
+        callback();
+      }
+    };
     return {
       // 弹窗显示/关闭标记
       dialogVisible: false,
@@ -64,14 +71,33 @@ export default {
         nameCh: "",
         nameEn: "",
         imgUrl: "",
-        status: "",
+        status: true,
         content: "",
       },
       // 表单项
       form_item: [
-        { type: "Input", label: "品牌中文", prop: "nameCh" },
-        { type: "Input", label: "品牌英文", prop: "nameEn" },
-        { type: "Slot", slotName: "logo", label: "LOGO" },
+        {
+          type: "Input",
+          label: "品牌中文",
+          prop: "nameCh",
+          validator: [
+            { validator: validateName, trigger: "change", required: true },
+          ],
+        },
+        {
+          type: "Input",
+          label: "品牌英文",
+          prop: "nameEn",
+          validator: [
+            { validator: validateName, trigger: "change", required: true },
+          ],
+        },
+        {
+          type: "Slot",
+          slotName: "logo",
+          label: "LOGO",
+          required: true,
+        },
         {
           type: "Radio",
           label: "禁启用",
@@ -84,8 +110,8 @@ export default {
         {
           label: "确定",
           key: "submit",
-          type: "danger",
-          handler: () => this.submit(),
+          type: "primary",
+          handler: () => this.formValidate(),
         },
       ],
       // 状态
@@ -99,7 +125,6 @@ export default {
   methods: {
     opened() {
       this.getBrandLogo();
-      this.getDetailed();
     },
     /** 获取LOGO */
     getBrandLogo() {
@@ -120,16 +145,21 @@ export default {
           this.getBrandLogo();
         });
     },
-    /** 获取详情 */
-    getDetailed() {
-      this.form_data = this.data;
-      this.logo_current = this.data.imgUrl;
-      this.form_data.imgUrl = this.data.imgUrl;
+    /** 确定按钮->提交表单 */
+    formValidate() {
+      this.$refs.vueForm.$refs.form.validate((valid) => {
+        if (valid) {
+          this.data.id ? this.edit() : this.add();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
-    /** 提交 */
-    submit() {
-      this.data.id ? this.edit() : this.add();
-    },
+    // /** 提交 */
+    // submit() {
+    //   this.data.id ? this.edit() : this.add();
+    // },
     /** 添加 */
     add() {
       this.form_data.imgUrl = this.logo_current;
@@ -164,6 +194,7 @@ export default {
       for (let key in this.form_data) {
         this.form_data[key] = "";
       }
+      this.form_data.status = true;
       // 清除选中的LOGO
       this.logo_current = "";
     },
@@ -178,6 +209,14 @@ export default {
     flagVisible: {
       handler(newValue, oldValue) {
         this.dialogVisible = newValue;
+      },
+    },
+    data: {
+      deep: true,
+      handler(newV) {
+        this.form_data = newV;
+        this.logo_current = newV.imgUrl;
+        this.form_data.imgUrl = newV.imgUrl;
       },
     },
   },
