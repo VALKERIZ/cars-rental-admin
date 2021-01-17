@@ -26,8 +26,8 @@
       >
         <el-option
           v-for="selectItem in item.options"
-          :key="selectItem.value || selectItem[item.select_vlaue]"
-          :value="selectItem.value || selectItem[item.select_vlaue]"
+          :key="selectItem.value || selectItem[item.select_value]"
+          :value="selectItem.value || selectItem[item.select_value]"
           :label="selectItem.label || selectItem[item.select_label]"
         ></el-option>
       </el-select>

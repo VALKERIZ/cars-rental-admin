@@ -159,8 +159,6 @@ export default {
       },
       status: this.$store.state.config.radio_disabled,
       type: this.$store.state.config.parking_type,
-      // 按钮加载
-      button_loading: false,
     };
   },
   components: { AMap, CityArea, VueForm },
@@ -178,7 +176,7 @@ export default {
         }
       });
     },
-    /** 重置按钮 */
+    /** 重置 */
     reset() {
       //重置表单
       this.$refs.vueForm.$refs.form.resetFields();
@@ -189,74 +187,71 @@ export default {
     },
     /** 新增停车场API */
     addParking() {
-      this.button_loading = true;
       ParkingAdd(this.form_data)
         .then((response) => {
           this.$message({
             type: "primary",
             message: response.message,
           });
-          this.button_loading = false;
           this.reset("form");
         })
-        .catch((error) => {
-          this.button_loading = false;
-        });
+        .catch((error) => {});
     },
     /** 修改停车场API */
     editParking() {
       let requestData = JSON.parse(JSON.stringify(this.form_data));
       requestData.id = this.id;
-      this.button_loading = true;
       ParkingEdit(requestData)
         .then((response) => {
           this.$message({
             type: "primary",
             message: response.message,
           });
-          this.button_loading = false;
           this.$router.push({
             name: "ParkingIndex",
           });
         })
-        .catch((error) => {
-          this.button_loading = false;
-        });
+        .catch((error) => {});
     },
     /** 获取详情 */
     getDetaile() {
       if (!this.id) {
         return false;
       }
-      ParkingDetailed({ id: this.id }).then((response) => {
-        const data = response.data;
-        // 还原数据
-        for (let key in data) {
-          // 接口请求出来的
-          if (Object.keys(this.form_data).includes(key)) {
-            // true  ["parkingName", "area", "address", "type", "carsNumber", "status", "lnglat", "content"].includes("region")
-            this.form_data[key] = data[key];
+      ParkingDetailed({ id: this.id })
+        .then((response) => {
+          const data = response.data;
+          // 还原数据
+          for (let key in data) {
+            // 接口请求出来的
+            if (Object.keys(this.form_data).includes(key)) {
+              // true  ["parkingName", "area", "address", "type", "carsNumber", "status", "lnglat", "content"].includes("region")
+              this.form_data[key] = data[key];
+            }
           }
-        }
-        // 设置覆盖物
-        const splitLnglat = data.lnglat.split(",");
-        const lnglat = {
-          lng: splitLnglat[0],
-          lat: splitLnglat[1],
-        };
-        // 设置点覆盖物
-        this.$refs.amap.setMarker(lnglat);
-        // 初始化省市区
-        this.$refs.cityArea.initDefault(data.region);
-      });
+          // 设置覆盖物(需要地图加载完成)
+          const splitLnglat = data.lnglat.split(",");
+          const lnglat = {
+            lng: splitLnglat[0],
+            lat: splitLnglat[1],
+          };
+          // 设置点覆盖物
+          this.$refs.amap.setMarker(lnglat);
+          // 初始化省市区
+          this.$refs.cityArea.initDefault(data.region);
+        })
+        .catch((e) => {
+          console.log("getDetaile error", e);
+          this.getDetaile();
+        });
     },
-    // 回掉函数
+    // 回调函数
     callbackComponent(params) {
       if (params.function) {
         this[params.function](params.data);
       }
     },
-    /** 1.设置经纬度 */
+    /** 1.获取并设置经纬度 */
     setLnglat(data) {
       this.form_data.lnglat = data.lnglat.value;
     },

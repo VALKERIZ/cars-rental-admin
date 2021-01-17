@@ -113,24 +113,19 @@ export default {
             element: "link",
             router: "/carsAdd",
           },
-          {
-            label: "下载",
-            prop: "down",
-            type: "success",
-            element: "button",
-            handler: () => this.aaaa(),
-          },
+          // {
+          //   label: "下载",
+          //   prop: "down",
+          //   type: "success",
+          //   element: "button",
+          //   handler: () => this.aaaa(),
+          // },
         ],
         form_config: {
           resetButton: true,
         },
       },
       switch_disabled: "",
-      switch_flag: false,
-      // 禁启用
-      parking_status: this.$store.state.config.radio_disabled,
-      // 停车场类型
-      parking_type: this.$store.state.config.parking_type,
       // 地图显示
       map_show: false,
       parking_data: {},
@@ -147,14 +142,10 @@ export default {
     },
     /** 禁启用 */
     switchChange(data) {
-      if (this.switch_flag) {
-        return false;
-      }
       const requestData = {
         id: data.id,
         status: data.status,
       };
-      // this.switch_flag = true;
       this.switch_disabled = data.id; // 第一种方式：组件本身的属性处理
       CarsStatus(requestData)
         .then((response) => {
@@ -163,11 +154,9 @@ export default {
             message: response.message,
           });
           this.switch_disabled = "";
-          // this.switch_flag = false;
         })
         .catch((error) => {
           this.switch_disabled = "";
-          // this.switch_flag = false;
         });
     },
     /** 显示地图 */
@@ -175,15 +164,10 @@ export default {
       this.map_show = true;
       this.parking_data = data;
     },
-    aaaa() {
-      alert(1111);
-    },
+    // aaaa() {
+    //   alert(1111);
+    // },
   },
-
-  // DOM元素渲染之前（生命周期）
-  beforeMount() {},
-  // DOM元素渲染完成（生命周期）
-  mounted() {},
 };
 </script>
 <style lass="scss" scoped></style>

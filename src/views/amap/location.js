@@ -1,6 +1,9 @@
 import { Message } from "element-ui";
+let geocoder = null;
 export function addressSetMapCenter(address, map) {
-    const geocoder = new AMap.Geocoder();
+    if (!geocoder) {
+        geocoder = new AMap.Geocoder();
+    }
     geocoder.getLocation(address, function(status, result) {
         if (status === "complete" && result.info == "OK") {
             let lat = result.geocodes[0].location.lat;

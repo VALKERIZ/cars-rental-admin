@@ -16,7 +16,7 @@ export default {
       // 经纬度
       lnglat: {},
       map: null,
-      zoom: 18,
+      zoom: 15,
       events: {},
     };
   },
@@ -35,9 +35,9 @@ export default {
           data: {
             lnglat,
           },
-        }); // 子组件调父组件的方法
+        });
         // 设置点覆盖物
-        this.setMarker();
+        this.setMarker(lnglat);
       });
     });
   },
@@ -45,7 +45,7 @@ export default {
     // 创建地图
     mapCreate(params) {
       this.map = new AMap.Map("amapContainer", {
-        center: [116.404765, 39.918052],
+        center: params,
         zoom: this.zoom, //初始化地图层级
       });
       this.map.on("complete", () => {
@@ -82,7 +82,11 @@ export default {
   props: {
     options: {
       type: Object,
-      default: () => {},
+      default: () => {
+        return {
+          mapLoad: false,
+        };
+      },
     },
   },
 };

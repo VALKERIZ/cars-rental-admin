@@ -8,6 +8,7 @@
     :options="cascader_options"
     :props="cascader_props"
     @change="changeValue"
+    :clearable="true"
   ></el-cascader>
 </template>
 
@@ -51,7 +52,7 @@ export default {
               data.forEach((item) => {
                 item.value = item[`${type}_CODE`];
                 item.label = item[`${type}_NAME`];
-                // 最后一层选择
+                // 最后一层选择；leaf为true时则节点数据为叶子节点
                 if (level === 2) {
                   item.leaf = level >= 2;
                 }
@@ -80,9 +81,11 @@ export default {
     initDefault(value) {
       if (value) {
         this.initValueFlag = true;
+        // 利用placeholder来模仿级联选择框
         this.initValue = value.split(",").join(" / ");
       }
     },
+    // 整个级联选择完成后触发
     changeValue(value) {
       this.$emit("update:cityAreaValue", value.join());
       // 匹配最后一项，区县
@@ -93,7 +96,7 @@ export default {
       this.address[2] = area.label;
       this.getAddress();
     },
-    /** 获取中文地址 */
+    /** 获取所选节点对应的中文 */
     getAddress(node) {
       if (node) {
         const index = node.level - 1;
@@ -129,7 +132,3 @@ export default {
 };
 </script>
 <style lang="scss" scoped></style>
-<!--
-1、组件传入的属性用 props 接收；
-2、this.$emit("update")返向修改，结合组件属性的.sync。
--->

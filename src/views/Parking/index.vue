@@ -33,7 +33,7 @@
                 class="width-120"
               >
                 <el-option
-                  v-for="item in parking_status"
+                  v-for="item in radio_disabled"
                   :label="item.label"
                   :value="item.value"
                   :key="item.value"
@@ -160,12 +160,11 @@ export default {
         status: "",
       },
       switch_disabled: "",
-      switch_flag: false,
       //
       search_key: "",
       keyword: "",
       // 禁启用
-      parking_status: this.$store.state.config.radio_disabled,
+      radio_disabled: this.$store.state.config.radio_disabled,
       // 停车场类型
       parking_type: this.$store.state.config.parking_type,
       // 地图显示
@@ -204,14 +203,10 @@ export default {
     },
     /** 禁启用 */
     switchChange(data) {
-      if (this.switch_flag) {
-        return false;
-      }
       const requestData = {
         id: data.id,
         status: data.status,
       };
-      // this.switch_flag = true;
       this.switch_disabled = data.id; // 第一种方式：组件本身的属性处理
       ParkingStatus(requestData)
         .then((response) => {
@@ -220,11 +215,10 @@ export default {
             message: response.message,
           });
           this.switch_disabled = "";
-          // this.switch_flag = false;
         })
         .catch((error) => {
           this.switch_disabled = "";
-          // this.switch_flag = false;
+          this.switchChange(data);
         });
     },
     /** 显示地图 */

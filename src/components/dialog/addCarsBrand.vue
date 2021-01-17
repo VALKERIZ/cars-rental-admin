@@ -1,7 +1,5 @@
 <template>
-  <!--dialog 弹窗
-    子组件接收父组件的数据，是通过属性接收
-  -->
+  <!--dialog 弹窗-->
   <el-dialog
     title="新增车辆品牌"
     :visible.sync="dialogVisible"
@@ -41,7 +39,7 @@
 import VueForm from "@c/form";
 import Upload from "@c/upload";
 // API
-import { BrandLogo, BrandAdd, BrandDetailed, BrandEdit } from "@/api/brand";
+import { BrandLogo, BrandAdd, BrandEdit } from "@/api/brand";
 export default {
   name: "",
   components: { VueForm, Upload },
@@ -82,7 +80,7 @@ export default {
           prop: "nameCh",
           placeholder: "请输入品牌中文",
           validator: [
-            { validator: validateName, trigger: "change", required: true },
+            { validator: validateName, trigger: "blur", required: true },
           ],
         },
         {
@@ -91,7 +89,7 @@ export default {
           prop: "nameEn",
           placeholder: "请输入品牌英文",
           validator: [
-            { validator: validateName, trigger: "change", required: true },
+            { validator: validateName, trigger: "blur", required: true },
           ],
         },
         {
@@ -116,10 +114,9 @@ export default {
           handler: () => this.formValidate(),
         },
       ],
-      // 状态
-      radio_disabled: this.$store.state.config.radio_disabled,
       // logo
       logo: [],
+      button_loading: false,
     };
   },
   methods: {
@@ -156,10 +153,6 @@ export default {
         }
       });
     },
-    // /** 提交 */
-    // submit() {
-    //   this.data.id ? this.edit() : this.add();
-    // },
     /** 添加 */
     add() {
       BrandAdd(this.form_data).then((response) => {
@@ -175,8 +168,7 @@ export default {
     },
     /** 修改 */
     edit() {
-      const requestData = JSON.parse(JSON.stringify(this.form_data));
-      BrandEdit(requestData).then((response) => {
+      BrandEdit(this.form_data).then((response) => {
         this.$message({
           type: "success",
           message: response.message,
@@ -197,10 +189,10 @@ export default {
       this.form_data.imgUrl = "";
     },
     close() {
-      this.reset("form");
       // 关闭窗口
       this.dialogVisible = false;
       this.$emit("update:flagVisible", false); // {}
+      this.reset("form");
     },
   },
   watch: {

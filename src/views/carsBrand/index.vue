@@ -130,20 +130,15 @@ export default {
     },
     /** 编辑 */
     edit(data) {
-      // this.data_brand = JSON.parse(JSON.stringify(data));
-      this.data_brand = Object.assign({}, data); // Es6 浅拷贝
+      this.data_brand = Object.assign({}, data);
       this.dialog_show = true;
     },
     /** 禁启用 */
     switchChange(data) {
-      if (this.switch_flag) {
-        return false;
-      }
       const requestData = {
         id: data.id,
         status: data.status,
       };
-      // this.switch_flag = true;
       this.switch_disabled = data.id; // 第一种方式：组件本身的属性处理
       BrandStatus(requestData)
         .then((response) => {
@@ -152,11 +147,10 @@ export default {
             message: response.message,
           });
           this.switch_disabled = "";
-          // this.switch_flag = false;
         })
         .catch((error) => {
           this.switch_disabled = "";
-          // this.switch_flag = false;
+          this.switchChange(data);
         });
     },
   },

@@ -6,11 +6,13 @@
       :formItme="form_item"
       :formHandler="form_handler"
     >
+      <!-- 略缩图 -->
       <template v-slot:carsImg>
         <div class="upload-img-wrap">
           <Upload :imgUrl.sync="form_data.carsImg" />
         </div>
       </template>
+      <!-- 包养日期 -->
       <template v-slot:maintain>
         <el-row :gutter="30">
           <el-col :span="6">
@@ -22,9 +24,9 @@
               style="width: 100%;"
             ></el-date-picker>
           </el-col>
-          <!-- <el-col :span="6">下次保养日期：2020-12-12</el-col> -->
         </el-row>
       </template>
+      <!-- 能源类型 -->
       <template v-slot:energy>
         <el-radio-group
           v-model="form_data.energyType"
@@ -60,6 +62,7 @@
           </el-row>
         </div>
       </template>
+      <!-- 车辆属性 -->
       <template v-slot:carsAttr>
         <el-button type="primary" @click="addCarsAttr">添加汽车属性</el-button>
         <div
@@ -108,7 +111,7 @@ export default {
           label: "车辆品牌",
           placeholder: "请选择车辆品牌",
           prop: "carsBrandId",
-          select_vlaue: "id", // 自有的私有属性
+          select_value: "id",
           select_label: "nameCh",
           options: [],
           required: true,
@@ -117,7 +120,7 @@ export default {
           type: "Select",
           label: "停车场",
           placeholder: "请选择停车场",
-          select_vlaue: "id", // 自有的私有属性
+          select_value: "id",
           select_label: "parkingName",
           prop: "parkingId",
           options: [],
@@ -221,8 +224,8 @@ export default {
         yearCheck: true,
         gear: 1,
         energyType: 2,
-        electric: 100,
-        oil: 100,
+        electric: 0,
+        oil: 0,
         carsAttr: "",
         content: "",
         maintainDate: "",
@@ -304,6 +307,7 @@ export default {
             const parking = this.form_item.filter(
               (item) => item.prop == "parkingId"
             );
+            console.log(parking);
             if (parking.length > 0) {
               parking[0].options = data;
             }

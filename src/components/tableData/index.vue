@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 顶部搜索栏 -->
+    <!-- 一.顶部搜索栏 -->
     <FormSearch
       v-if="table_config.search_form"
       :formItme="table_config.form_item"
@@ -9,7 +9,7 @@
       @callbackComponent="callbackComponent"
     />
 
-    <!-- 表格 -->
+    <!-- 二.表格 -->
     <el-table
       v-loading="loading_table"
       element-loading-text="加载中"
@@ -17,7 +17,7 @@
       border
       style="width: 100%"
     >
-      <!-- 1.第一个表头多选框 -->
+      <!-- 1.第一列：多选框 -->
       <el-table-column
         v-if="table_config.checkbox"
         type="selection"
@@ -76,6 +76,12 @@
           :width="item.width"
         >
           <template slot-scope="scope">
+            <!--额外-->
+            <slot
+              v-if="item.slotName"
+              :name="item.slotName"
+              :data="scope.row"
+            ></slot>
             <!--编辑-->
             <template v-if="item.default && item.default.editButton">
               <el-button
@@ -105,16 +111,9 @@
             <el-button
               size="small"
               v-if="item.default && item.default.deleteButton"
-              :loading="scope.row.id == rowId"
               @click="delConfirm(scope.row.id)"
               >删除</el-button
             >
-            <!--额外-->
-            <slot
-              v-if="item.slotName"
-              :name="item.slotName"
-              :data="scope.row"
-            ></slot>
           </template>
         </el-table-column>
         <!--纯文本渲染-->
@@ -171,6 +170,7 @@ export default {
         checkbox: true,
         url: "",
         pagination: true,
+        // 分页相关参数
         data: {},
         search_form: true,
         // form
@@ -224,9 +224,6 @@ export default {
             this.table_data = data.data;
           }
           // 页码
-          this.$nextTick(() => {
-            // 考虑到DOM元素渲染完成时候
-          });
           this.total = data.total;
           this.loading_table = false;
         })
@@ -243,11 +240,12 @@ export default {
       }
       this.loadData();
     },
-    /** 页码 */
+    /** 每页显示多少 */
     handleSizeChange(val) {
       this.table_config.data.pageSize = val;
       this.loadData();
     },
+    /** 页码切换 */
     handleCurrentChange(val) {
       this.table_config.data.pageNumber = val;
       this.loadData();
