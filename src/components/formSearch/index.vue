@@ -38,11 +38,7 @@
       </div>
       <!-- city-->
       <div v-if="item.type === 'Keyword'">
-        <KeyWord
-          ref="keyword"
-          :options="['address', 'parkingName']"
-          :value.sync="keyword"
-        />
+        <KeyWord ref="keyword" :options="item.options" :value.sync="keyword" />
       </div>
       <!-- slot -->
       <slot v-if="item.type === 'Slot'" :name="item.slotName" />
@@ -100,7 +96,7 @@ export default {
     },
     formConfig: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
   },
   data() {
@@ -137,11 +133,11 @@ export default {
     /** 重置 */
     reset() {
       this.$refs.form.resetFields();
-      // 城市组件
-      if (this.$refs.city[0]) {
+      //城市组件
+      if (this.$refs.city && this.$refs.city[0]) {
         this.$refs.city[0].clear();
       }
-      // 关键字
+      //关键字
       if (this.$refs.keyword[0]) {
         this.$refs.keyword[0].clear();
       }

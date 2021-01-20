@@ -2,6 +2,11 @@
 @import "./elementui.scss";
 @import "./normalize.scss";
 @import "./svgicon.scss";
+// color
+.color-white {
+    color: #fff;
+}
+
 // float
 .pull-right {
     float: right;
@@ -12,9 +17,18 @@
     height: 30px;
 }
 
+// margin
+.margin-bottom-25 {
+    margin-bottom: 25px;
+}
+
 // padding
 .padding-top-30 {
     padding-top: 30px;
+}
+
+.padding-bottom-25 {
+    padding-bottom: 25px;
 }
 
 // width

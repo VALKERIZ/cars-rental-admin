@@ -103,7 +103,11 @@ export default {
             width: "120px",
             options: "radio_disabled",
           },
-          { label: "关键字", type: "Keyword" },
+          {
+            label: "关键字",
+            type: "Keyword",
+            options: ["parkingName", "address"],
+          },
         ],
         form_handler: [
           {
@@ -113,15 +117,9 @@ export default {
             element: "link",
             router: "/carsAdd",
           },
-          // {
-          //   label: "下载",
-          //   prop: "down",
-          //   type: "success",
-          //   element: "button",
-          //   handler: () => this.aaaa(),
-          // },
         ],
         form_config: {
+          searchButton: true,
           resetButton: true,
         },
       },

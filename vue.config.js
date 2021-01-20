@@ -68,7 +68,6 @@ module.exports = {
                     [`^${process.env.VUE_APP_API}`]: "",
                 },
             },
-            // http://www.web-jshtml.cn/api/vue3  /api/getCode
         },
     },
     /**

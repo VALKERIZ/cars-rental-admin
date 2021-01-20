@@ -8,8 +8,9 @@
       :formConfig="table_config.form_config"
       @callbackComponent="callbackComponent"
     />
-
-    <!-- 二.表格 -->
+    <!-- 二.插槽 -->
+    <slot name="typeList"></slot>
+    <!-- 三.表格 -->
     <el-table
       v-loading="loading_table"
       element-loading-text="加载中"
@@ -162,10 +163,12 @@ export default {
   data() {
     return {
       // 加载提示
-      loading_table: true,
+      loading_table: false,
       // tableData
       table_data: [],
       table_config: {
+        // 初始化是否请求接口
+        isRequest: true,
         thead: [],
         checkbox: true,
         url: "",
@@ -176,9 +179,7 @@ export default {
         // form
         form_item: [],
         form_handler: [],
-        form_config: {
-          resetButton: false,
-        },
+        form_config: {},
       },
       // 页码
       total: 0,
@@ -208,7 +209,7 @@ export default {
         }
       }
       // 配置完成后开始读取接口数据
-      this.loadData();
+      this.table_config.isRequest && this.loadData();
     },
     loadData() {
       let requestData = {
@@ -305,7 +306,7 @@ export default {
   },
   watch: {
     config: {
-      handler(newValue) {
+      handler(newV, oldV) {
         this.initConfig();
       },
       immediate: true,

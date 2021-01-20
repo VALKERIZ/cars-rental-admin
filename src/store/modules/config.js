@@ -34,6 +34,8 @@ const state = {
     keyword_options: [
         { label: "停车场名称", value: "parkingName" },
         { label: "详细区域", value: "address" },
+        { label: "属性", value: "key" },
+        { label: "描述", value: "value" },
     ],
 };
 export default {
