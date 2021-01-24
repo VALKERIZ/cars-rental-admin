@@ -48,8 +48,8 @@ export default {
       // 表单项
       form_item: [
         { type: "Input", label: "当前属性", prop: "typeValue", disabled: true },
-        { type: "Input", label: "属性", prop: "key" },
-        { type: "Input", label: "描述", prop: "value" },
+        { type: "Input", label: "属性(key)", prop: "key" },
+        { type: "Input", label: "描述(value)", prop: "value" },
       ],
       // 表单按钮
       form_handler: [

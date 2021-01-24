@@ -31,40 +31,46 @@ export default {
   computed: {
     // 计算公里
     countKm() {
+      // 触发更新
       let type = this.energyType;
       let electric = this.electric;
       let oil = this.oil;
       // 监听值变化时计算属性
       if (!this.checked) {
-        this.$emit("update:countKm", 0);
+        this.$emit("update:countKm", "参数有误或缺失，无法计算");
         return "";
       }
       // 计算可行驶公里数
       let km = 0;
-      // console.log(
-      //   electric,
-      //   this.attr_item.carsBody.battery_capacity,
-      //   this.attr_item.basics.true_electric_consume
-      // );
-      switch (type) {
-        case 1:
-          km =
-            (electric * this.attr_item.carsBody.battery_capacity) /
-            this.attr_item.basics.true_electric_consume;
-          break;
-        case 2:
-          km =
-            (oil * this.attr_item.carsBody.tank_volume) /
-            this.attr_item.basics.true_oil_consume;
-          break;
-        case 3:
-          km =
-            (oil * this.attr_item.carsBody.tank_volume) /
-              this.attr_item.basics.true_oil_consume +
-            (electric * this.attr_item.carsBody.battery_capacity) /
-              this.attr_item.basics.true_electric_consume;
-          break;
+      let obj = this.$store.state.config.kmCalculate[type];
+      let rs;
+      for (let i in obj.type) {
+        let expression = `${obj.label[i]} * this.attr_item.${obj.type[i]} / this.attr_item.${obj.consume[i]}`;
+        rs = eval(expression);
+        km += rs;
       }
+      // switch (type) {
+      //   // 电动
+      //   case 1:
+      //     km =
+      //       (electric * this.attr_item.carsBody.battery_capacity) /
+      //       this.attr_item.basics.true_electric_consume;
+      //     break;
+      //   // 油
+      //   case 2:
+      //     km =
+      //       (oil * this.attr_item.carsBody.tank_volume) /
+      //       this.attr_item.basics.true_oil_consume;
+      //     break;
+      //   // 混动
+      //   case 3:
+      //     km =
+      //       (oil * this.attr_item.carsBody.tank_volume) /
+      //         this.attr_item.basics.true_oil_consume +
+      //       (electric * this.attr_item.carsBody.battery_capacity) /
+      //         this.attr_item.basics.true_electric_consume;
+      //     break;
+      // }
       // console.log("km", km);
       // 返回值
       this.$emit("update:countKm", km.toFixed(2));
@@ -104,41 +110,54 @@ export default {
     },
     // 字段符合校验
     validate() {
-      switch (this.energyType) {
-        case 1:
-          if (
-            this.attr_item.basics &&
-            this.attr_item.basics.true_electric_consume &&
-            this.attr_item.carsBody &&
-            this.attr_item.carsBody.battery_capacity
-          ) {
-            this.checked = true;
-          }
-          break;
-        case 2:
-          if (
-            this.attr_item.basics &&
-            this.attr_item.basics.true_oil_consume &&
-            this.attr_item.carsBody &&
-            this.attr_item.carsBody.tank_volume
-          ) {
-            this.checked = true;
-          }
-          break;
-
-        case 3:
-          if (
-            this.attr_item.basics &&
-            this.attr_item.basics.true_electric_consume &&
-            this.attr_item.basics.true_oil_consume &&
-            this.attr_item.carsBody &&
-            this.attr_item.carsBody.tank_volume &&
-            this.attr_item.carsBody.battery_capacity
-          ) {
-            this.checked = true;
-          }
-          break;
+      let obj = this.$store.state.config.kmCalculate[this.energyType];
+      let rs = false;
+      for (let i in obj.type) {
+        let condition = `this.attr_item.${obj.type[i]}&&this.attr_item.${obj.consume[i]}`;
+        if (condition) {
+          rs = true;
+        } else {
+          rs = false;
+        }
       }
+      this.checked = rs;
+      // switch (this.energyType) {
+      //   // 电动
+      //   case 1:
+      //     if (
+      //       this.attr_item.basics &&
+      //       this.attr_item.basics.true_electric_consume &&
+      //       this.attr_item.carsBody &&
+      //       this.attr_item.carsBody.battery_capacity
+      //     ) {
+      //       this.checked = true;
+      //     }
+      //     break;
+      //   // 油
+      //   case 2:
+      //     if (
+      //       this.attr_item.basics &&
+      //       this.attr_item.basics.true_oil_consume &&
+      //       this.attr_item.carsBody &&
+      //       this.attr_item.carsBody.tank_volume
+      //     ) {
+      //       this.checked = true;
+      //     }
+      //     break;
+      //   // 混动
+      //   case 3:
+      //     if (
+      //       this.attr_item.basics &&
+      //       this.attr_item.basics.true_electric_consume &&
+      //       this.attr_item.basics.true_oil_consume &&
+      //       this.attr_item.carsBody &&
+      //       this.attr_item.carsBody.tank_volume &&
+      //       this.attr_item.carsBody.battery_capacity
+      //     ) {
+      //       this.checked = true;
+      //     }
+      //     break;
+      // }
     },
   },
   props: {
@@ -182,22 +201,3 @@ export default {
 };
 </script>
 <style lang="scss" scoped></style>
-<!--
-第一种情况：
-实测油耗(L/100KM)  /   7.8L / 100KM
-油箱容积 56L    
-油量： 100 = 56L，50 = 28L，0 = 0L
-
-总公里数：？  56 / 7.8 * 100KM = 717.94KM
-
-56L
-
-100 = 56L / 7.8 * 100KM = 717.94KM
-50 = 28L / 7.8 * 100KM = 358.97KM
-0 = 0 / 7.8 * 100KM = 358.97KM
-
-油量100 * 油箱容积56L / 100 = 56L
-油量50 * 油箱容积56L / 100 = 28L
-
-100 = 56
--->

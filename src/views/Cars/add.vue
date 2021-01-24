@@ -172,22 +172,24 @@ export default {
           prop: "energyType",
           label: "能源类型",
         },
-        {
-          type: "Disabled",
-          label: "禁启用",
-          placeholder: "请选择禁启用",
-          prop: "status",
-        },
+
         {
           type: "Input",
           label: "可行驶公里",
           prop: "countKm",
+          disabled: true,
         },
         {
           type: "Slot",
           slotName: "carsAttr",
           prop: "carsAttr",
           label: "车辆属性",
+        },
+        {
+          type: "Disabled",
+          label: "禁启用",
+          placeholder: "请选择禁启用",
+          prop: "status",
         },
         {
           type: "Wangeditor",

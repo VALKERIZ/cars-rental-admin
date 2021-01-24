@@ -25,11 +25,40 @@ const state = {
         { label: "人工智能", value: 3 },
     ],
     // 能源类型
-    energyType: [
-        { label: "电", value: 1 },
-        { label: "油", value: 2 },
-        { label: "混合动力", value: 3 },
+    energyType: [{
+            label: "电",
+            value: 1,
+        },
+        {
+            label: "油",
+            value: 2,
+        },
+        {
+            label: "混合动力",
+            value: 3,
+        },
     ],
+    // 公里数计算
+    kmCalculate: {
+        //   电
+        1: {
+            label: ["electric"],
+            type: ["carsBody.battery_capacity"],
+            consume: ["basics.true_electric_consume"],
+        },
+        // 油
+        2: {
+            label: ["oil"],
+            type: ["carsBody.tank_volume"],
+            consume: ["basics.true_oil_consume"],
+        },
+        // 混合动力
+        3: {
+            label: ["electric", "oil"],
+            type: ["carsBody.battery_capacity", "carsBody.tank_volume"],
+            consume: ["basics.true_electric_consume", "basics.true_oil_consume"],
+        },
+    },
     // 关键字搜索
     keyword_options: [
         { label: "停车场名称", value: "parkingName" },
