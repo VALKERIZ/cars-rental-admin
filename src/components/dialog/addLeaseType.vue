@@ -1,7 +1,6 @@
 <template>
-  <!--dialog 弹窗-->
   <el-dialog
-    title="车辆自定义属性添加"
+    title="新增租车类型"
     width="30%"
     :visible.sync="dialogVisible"
     class="cars-dialog-center"
@@ -21,7 +20,7 @@
 // 组件
 import VueForm from "@c/form";
 // API
-import { CarsTypeAdd } from "@/api/carsAttr";
+import { LeaseAdd, LeaseEdit } from "@/api/lease";
 export default {
   name: "",
   components: { VueForm },
@@ -41,21 +40,25 @@ export default {
       dialogVisible: false,
       // 表单数据
       form_data: {
-        key: "",
-        value: "",
-        typeValue: "",
+        carsLeaseTypeName: "",
+        carsLeaseStatus: true,
+        carsLeaseDesc: "",
       },
       // 表单项
       form_item: [
         {
           type: "Input",
-          label: "当前属性",
-          prop: "typeValue",
-          disabled: true,
+          label: "租车类型",
+          prop: "carsLeaseTypeName",
           required: true,
         },
-        { type: "Input", label: "属性(key)", prop: "key", required: true },
-        { type: "Input", label: "描述(value)", prop: "value", required: true },
+        {
+          type: "Disabled",
+          label: "禁/启状态",
+          prop: "carsLeaseStatus",
+          required: true,
+        },
+        { type: "Textarea", label: "描述", prop: "carsLeaseDesc" },
       ],
       // 表单按钮
       form_handler: [
@@ -66,19 +69,13 @@ export default {
           handler: () => this.formValidate(),
         },
       ],
-      // 状态
-      radio_disabled: this.$store.state.config.radio_disabled,
-      // 选中的LOGO
-      logo_current: "",
-      // logo
-      logo: [],
     };
   },
   methods: {
     formValidate() {
       this.$refs.vueForm.$refs.form.validate((valid) => {
         if (valid) {
-          this.add();
+          this.form_data.carsLeaseTypeId ? this.edit() : this.add();
         } else {
           console.log("error validate!!");
           return false;
@@ -86,12 +83,7 @@ export default {
       });
     },
     add() {
-      const requestData = {
-        typeId: this.data.id,
-        key: this.form_data.key,
-        value: this.form_data.value,
-      };
-      CarsTypeAdd(requestData).then((response) => {
+      LeaseAdd({ ...this.form_data }).then((response) => {
         this.$message({
           message: response.message,
           type: "success",
@@ -99,30 +91,43 @@ export default {
         this.reset();
       });
     },
+    edit() {
+      LeaseEdit({ ...this.form_data }).then((response) => {
+        this.$message({
+          message: response.message,
+          type: "success",
+        });
+        this.close();
+      });
+    },
     /** 重置表单 */
     reset() {
       this.$refs.vueForm.resetForm();
+      this.form_data = {
+        carsLeaseTypeName: "",
+        carsLeaseStatus: true,
+        carsLeaseDesc: "",
+      };
     },
     close() {
-      this.reset();
       // 关闭窗口
       this.dialogVisible = false;
+      this.reset();
       this.$emit("update:flagVisible", false);
-      // 请求新数据
-      this.$emit("callbackComponent", {
-        function: "getCarsTypeList",
-      });
+      // 方法二：VUEx ->请求新数据
+      this.$store.commit("common/SET_TABL_DATA_FLAG");
     },
   },
   watch: {
     flagVisible: {
-      handler(newValue) {
+      handler(newValue, oldValue) {
         this.dialogVisible = newValue;
       },
     },
     data: {
       handler(newValue) {
-        this.form_data.typeValue = newValue.value;
+        console.log(2222);
+        this.form_data = newValue;
       },
     },
   },

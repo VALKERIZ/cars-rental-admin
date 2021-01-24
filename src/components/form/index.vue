@@ -15,6 +15,16 @@
         :style="{ width: item.width ? item.width : '300px' }"
         :disabled="item.disabled"
       ></el-input>
+      <!-- textarea -->
+      <el-input
+        type="textarea"
+        :rows="item.rows || 5"
+        v-if="item.type === 'Textarea'"
+        v-model.trim="formData[item.prop]"
+        :placeholder="item.placeholder"
+        :style="{ width: item.width }"
+        :disabled="item.disabled"
+      ></el-input>
       <!-- Select-->
       <el-select
         filterable
@@ -120,6 +130,7 @@ export default {
     return {
       // 禁启用数据
       radio_disabled: this.$store.state.config.radio_disabled,
+      // 校验失败，提示信息
       type_msg: {
         Input: "请输入",
         Radio: "请选择",

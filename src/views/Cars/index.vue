@@ -1,18 +1,6 @@
 <template>
   <div>
-    <TabalData ref="table" :config="table_config">
-      <!--禁启用-->
-      <template v-slot:status="slotData">
-        <el-switch
-          :disabled="slotData.data.id == switch_disabled"
-          @change="switchChange(slotData.data)"
-          v-model="slotData.data.status"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-        >
-        </el-switch>
-      </template>
-    </TabalData>
+    <TabalData ref="table" :config="table_config"> </TabalData>
     <MapLocation :flagVisible.sync="map_show" :data="parking_data" />
   </div>
 </template>
@@ -61,9 +49,8 @@ export default {
           {
             label: "禁启用",
             prop: "status",
-            type: "slot",
-            slotName: "status",
-            width: "100px",
+            type: "switch",
+            handler: (value, data) => this.switchChange(value, data),
           },
           { label: "停车场", prop: "parkingName" },
           {
@@ -77,9 +64,17 @@ export default {
             type: "operation",
             default: {
               deleteButton: true,
-              editButton: true,
-              editButtonLink: "CarsAdd",
             },
+            buttonGroup: [
+              {
+                label: "编辑",
+                type: "danger",
+                event: "link",
+                name: "CarsAdd",
+                key: "id",
+                value: "id",
+              },
+            ],
           },
         ],
         url: "carsList", // 真实URL请求地址
@@ -111,7 +106,7 @@ export default {
         ],
         form_handler: [
           {
-            label: "新增",
+            label: "新增车辆",
             prop: "add",
             type: "success",
             element: "link",
@@ -128,7 +123,6 @@ export default {
       map_show: false,
       parking_data: {},
       table_loading: false,
-      rowId: "",
     };
   },
   components: { CityArea, MapLocation, TabalData },
@@ -139,7 +133,7 @@ export default {
       }
     },
     /** 禁启用 */
-    switchChange(data) {
+    switchChange(value, data) {
       const requestData = {
         id: data.id,
         status: data.status,
@@ -162,9 +156,6 @@ export default {
       this.map_show = true;
       this.parking_data = data;
     },
-    // aaaa() {
-    //   alert(1111);
-    // },
   },
 };
 </script>

@@ -17,9 +17,9 @@
       </template>
     </TabalData>
     <AddCarsAttr
-      :flagVisible="dialog_show"
+      :flagVisible.sync="dialog_show"
       :data="current_cars_type_data"
-      @closed="dialogClosed"
+      @callbackComponent="callbackComponent"
     />
   </div>
 </template>
@@ -49,9 +49,10 @@ export default {
         ],
         url: "carsAttrList", // 真实URL请求地址
         data: {},
+        form_item: [],
         form_handler: [
           {
-            label: "新增",
+            label: "新增车辆属性",
             prop: "add",
             type: "success",
             element: "button",
@@ -125,11 +126,6 @@ export default {
         return false;
       }
       this.dialog_show = true;
-    },
-    dialogClosed(value) {
-      console.log(value);
-      this.dialog_show = value;
-      this.getCarsTypeList();
     },
   },
 };

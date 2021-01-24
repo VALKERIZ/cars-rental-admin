@@ -70,7 +70,6 @@ export default {
         nameEn: "",
         imgUrl: "",
         status: true,
-        content: "",
       },
       // 表单项
       form_item: [
@@ -116,7 +115,6 @@ export default {
       ],
       // logo
       logo: [],
-      button_loading: false,
     };
   },
   methods: {
@@ -144,11 +142,11 @@ export default {
     },
     /** 确定按钮->提交表单 */
     formValidate() {
-      this.$refs.vueForm.$refs.form.validate((valid) => {
-        if (valid) {
+      this.$refs.vueForm.$refs.form.validate((value) => {
+        if (value) {
           this.data.id ? this.edit() : this.add();
         } else {
-          console.log("error submit!!");
+          console.log("error validate!!");
           return false;
         }
       });
@@ -160,10 +158,7 @@ export default {
           type: "success",
           message: response.message,
         });
-        this.close();
-        this.$emit("callbackComponent", {
-          function: "search",
-        });
+        this.reset();
       });
     },
     /** 修改 */
@@ -174,25 +169,27 @@ export default {
           message: response.message,
         });
         this.close();
-        this.$emit("callbackComponent", {
-          function: "search",
-        });
       });
     },
     /** 重置表单 */
-    reset(formName) {
-      for (let key in this.form_data) {
-        this.form_data[key] = "";
-      }
-      this.form_data.status = true;
-      // 清除选中的LOGO
-      this.form_data.imgUrl = "";
+    reset() {
+      this.$refs.vueForm.resetForm();
     },
     close() {
       // 关闭窗口
       this.dialogVisible = false;
-      this.$emit("update:flagVisible", false); // {}
-      this.reset("form");
+      // this.reset();
+      this.form_data = {
+        nameCh: "",
+        nameEn: "",
+        imgUrl: "",
+        status: true,
+      };
+      this.$emit("update:flagVisible", false);
+      // 方法一：回调->请求新数据
+      this.$emit("callbackComponent", {
+        function: "loadData",
+      });
     },
   },
   watch: {
@@ -202,10 +199,10 @@ export default {
       },
     },
     data: {
-      deep: true,
       handler(newV) {
+        console.log(newV);
         this.form_data = newV;
-        this.form_data.imgUrl = newV.imgUrl;
+        // this.form_data.imgUrl = newV.imgUrl;
       },
     },
   },

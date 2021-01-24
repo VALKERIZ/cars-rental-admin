@@ -1,24 +1,7 @@
 <template>
   <div>
     <!-- 表格数据 -->
-    <TabalData ref="table" :config="table_config">
-      <template v-slot:status="slotData">
-        <el-switch
-          v-model="slotData.data.status"
-          :disabled="slotData.data.id == switch_disabled"
-          @change="switchChange(slotData.data)"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-        >
-        </el-switch>
-      </template>
-      <!--操作-->
-      <template v-slot:operation="slotData">
-        <el-button type="danger" size="small" @click="edit(slotData.data)"
-          >编辑</el-button
-        >
-      </template>
-    </TabalData>
+    <TabalData ref="table" :config="table_config"> </TabalData>
     <AddCarsBrand
       :flagVisible.sync="dialog_show"
       :data="data_brand"
@@ -54,17 +37,23 @@ export default {
           {
             label: "禁启用",
             prop: "status",
-            type: "slot",
-            slotName: "status",
+            type: "switch",
+            handler: (value, data) => this.switchChange(value, data),
           },
           {
             label: "操作",
             type: "operation",
-            width: 200,
             default: {
               deleteButton: true,
             },
-            slotName: "operation",
+            buttonGroup: [
+              {
+                label: "编辑",
+                type: "danger",
+                event: "button",
+                handler: (data) => this.edit(data),
+              },
+            ],
           },
         ],
         url: "brandList", // 真实URL请求地址
@@ -97,13 +86,12 @@ export default {
           searchButton: true,
         },
       },
-      // row_id
-      row_id: "",
       data_brand: {},
-      // switch_disabled
+      // 禁启用开关
       switch_disabled: "",
       // 弹窗标记
       dialog_show: false,
+      // 搜索栏表单
       form: {
         brand: "",
       },
@@ -111,7 +99,6 @@ export default {
   },
   methods: {
     callbackComponent(params) {
-      console.log(params);
       if (params.function) {
         this[params.function]();
       }
@@ -128,13 +115,16 @@ export default {
       // 调用子组件的方法
       this.$refs.table.requestData(requestData);
     },
+    loadData() {
+      this.$refs.table.requestData();
+    },
     /** 编辑 */
     edit(data) {
       this.data_brand = Object.assign({}, data);
       this.dialog_show = true;
     },
     /** 禁启用 */
-    switchChange(data) {
+    switchChange(value, data) {
       const requestData = {
         id: data.id,
         status: data.status,

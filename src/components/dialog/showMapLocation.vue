@@ -1,7 +1,4 @@
 <template>
-  <!--dialog 弹窗
-    子组件接收父组件的数据，是通过属性接收
-  -->
   <el-dialog
     :title="data.parkingName"
     :visible.sync="dialogVisible"

@@ -68,6 +68,25 @@
           :value.sync="form_data.carsAttr"
         />
       </template>
+      <template v-slot:leaseList>
+        <el-row :gutter="20">
+          <el-col
+            :span="4"
+            v-for="item in form_data.leasePrice"
+            :key="item.carsLeaseTypeId"
+          >
+            <div>{{ item.carsLeaseTypeName }}</div>
+            <el-input-number
+              v-model="item.price"
+              controls-position="right"
+              :min="0"
+              :max="10000"
+              placeholder="请输入价格"
+              style="width: 100%;"
+            ></el-input-number>
+          </el-col>
+        </el-row>
+      </template>
     </VueForm>
   </div>
 </template>
@@ -78,7 +97,8 @@ import CarsAttr from "./component/carsAttr";
 
 // API
 import { GetCarsBrand, GetParking } from "@/api/common";
-import { CarsAdd, CarsDetailed, CarsEdit } from "@/api/cars";
+import { CarsInfoAdd, CarsInfoEdit, CarsInfoDetailed } from "@/api/cars";
+import { LeaseList } from "@/api/lease";
 export default {
   name: "ParkingAdd",
   components: { VueForm, CarsAttr },
@@ -90,7 +110,6 @@ export default {
       editor: null,
       // 能源类型
       energyType: this.$store.state.config.energyType,
-      cars_attr: [],
       form_item: [
         {
           type: "Select",
@@ -186,6 +205,12 @@ export default {
           label: "车辆属性",
         },
         {
+          type: "Slot",
+          slotName: "leaseList",
+          prop: "lease",
+          label: "租赁价格",
+        },
+        {
           type: "Disabled",
           label: "禁启用",
           placeholder: "请选择禁启用",
@@ -216,6 +241,7 @@ export default {
         carsImg: "",
         yearCheck: true,
         gear: 1,
+        leasePrice: [],
         energyType: 2,
         electric: 0,
         oil: 0,
@@ -236,6 +262,7 @@ export default {
   beforeMount() {
     this.getCarsBrandList();
     this.getParkingList();
+    this.getLeaseList();
     if (this.id) {
       this.getDetailed();
     }
@@ -253,24 +280,63 @@ export default {
         }
       });
     },
+    /** 车辆属性格式化 */
+    formatCarsAttr() {
+      this.$refs.carsAttr.callbackValue();
+    },
     /** edit */
     edit() {
-      CarsEdit({ ...this.form_data, id: this.id }).then((response) => {
+      CarsInfoEdit({
+        ...this.form_data,
+        id: this.id,
+      }).then((response) => {
         this.$message({
           message: response.message,
           type: "success",
         });
+        this.$router.push({ path: "/carsIndex" });
       });
     },
     add() {
-      CarsAdd(this.form_data).then((response) => {
+      CarsInfoAdd({ ...this.form_data }).then((response) => {
         this.$message({
           message: response.message,
           type: "success",
         });
-        this.$refs.vueForm.resetForm();
-        this.cars_attr = [];
-        this.form_data.content = "";
+        this.$router.push({ path: "/carsIndex" });
+      });
+    },
+    /** 获取详情 */
+    getDetailed() {
+      CarsInfoDetailed({ id: this.id })
+        .then((response) => {
+          const data = response.data;
+          if (!data) {
+            return false;
+          }
+          for (let key in data) {
+            if (Object.keys(this.form_data).includes(key)) {
+              this.form_data[key] = data[key];
+            }
+          }
+          console.log(this.form_data);
+        })
+        .catch((e) => {
+          console.log("getDetailed error", e);
+          this.getDetailed();
+        });
+    },
+    /** 获取租赁列表 */
+    getLeaseList() {
+      // id存在则不请求
+      if (this.id) {
+        return false;
+      }
+      LeaseList().then((response) => {
+        const data = response.data.data;
+        if (data) {
+          this.form_data.leasePrice = data;
+        }
       });
     },
     // 获取车辆品牌
@@ -312,49 +378,7 @@ export default {
           this.getParkingList();
         });
     },
-    /** 获取详情 */
-    getDetailed() {
-      CarsDetailed({ id: this.id })
-        .then((response) => {
-          const data = response.data;
-          if (!data) {
-            return false;
-          }
-          for (let key in data) {
-            if (Object.keys(this.form_data).includes(key)) {
-              this.form_data[key] = data[key];
-            }
-          }
-          console.log(this.form_data);
-          const carsAttr = JSON.parse(data.carsAttr);
-          const arr = [];
-          for (let key in carsAttr) {
-            const json = {};
-            json.attr_key = key;
-            json.attr_value = carsAttr[key];
-            // { attr_key: "", attr_value: "" }
-            arr.push(json);
-          }
-          this.cars_attr = arr;
-          // { attr_key: "", attr_value: "" }
-        })
-        .catch((e) => {
-          console.log("getDetailed error", e);
-          this.getDetailed();
-        });
-    },
-    /** 添加车辆属性 */
-    addCarsAttr() {
-      this.cars_attr.push({ attr_key: "", attr_value: "" });
-    },
-    /** 删除车辆属性 */
-    delCarsAttr(index) {
-      this.cars_attr.splice(index, 1); // 第一个参数：指定数组索引位置， 第二参数：从指定位置开始删除多少个。删除数组的指定元素
-    },
-    /** 车辆属性格式化 */
-    formatCarsAttr() {
-      this.$refs.carsAttr.callbackValue();
-    },
+
     changeEnergyType(value) {
       this.form_data.oil = 0;
       this.form_data.electric = 0;

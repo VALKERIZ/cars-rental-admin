@@ -45,9 +45,12 @@ export default {
       let obj = this.$store.state.config.kmCalculate[type];
       let rs;
       for (let i in obj.type) {
-        let expression = `${obj.label[i]} * this.attr_item.${obj.type[i]} / this.attr_item.${obj.consume[i]}`;
-        rs = eval(expression);
-        km += rs;
+        let preCondition = `this.attr_item.carsBody && this.attr_item.basics && this.attr_item.${obj.type[i]}&&this.attr_item.${obj.consume[i]}`;
+        if (eval(preCondition)) {
+          let expression = `${obj.label[i]} * this.attr_item.${obj.type[i]} / this.attr_item.${obj.consume[i]}`;
+          rs = eval(expression);
+          km += rs;
+        }
       }
       // switch (type) {
       //   // 电动
