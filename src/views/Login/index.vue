@@ -189,6 +189,8 @@ export default {
             message: response.message,
             type: "success",
           });
+          let code = response.message.split("：")[1];
+          this.form.code = code;
           // 激活按钮
           submit_disabled.value = false;
           // 清除加载
