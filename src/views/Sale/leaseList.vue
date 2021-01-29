@@ -13,8 +13,6 @@ import TabalData from "@c/tableData";
 import addLeaseType from "@c/dialog/addLeaseType";
 // API
 import { LeaseStatus } from "@/api/lease";
-// common
-import { address, yearCheckType, energyType } from "@/utils/common";
 export default {
   name: "Cars",
   data() {
@@ -32,7 +30,7 @@ export default {
             handler: (value, data) => this.leasrStatus(value, data),
           },
           { label: "描述", prop: "carsLeaseDesc" },
-          { label: "车辆列表", prop: "carsList", width: 500 },
+          // { label: "车辆列表", prop: "carsList", width: 500 },
           {
             label: "操作",
             type: "operation",

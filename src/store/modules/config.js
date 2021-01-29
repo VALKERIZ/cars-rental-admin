@@ -59,12 +59,25 @@ const state = {
             consume: ["basics.true_electric_consume", "basics.true_oil_consume"],
         },
     },
+    // 性别
+    gender: [
+        { label: "男", value: 1 },
+        { label: "女", value: 2 },
+    ],
+    // 黑名单
+    blacklist: [
+        { label: "是", value: true },
+        { label: "否", value: false },
+    ],
     // 关键字搜索
     keyword_options: [
         { label: "停车场名称", value: "parkingName" },
         { label: "详细区域", value: "address" },
         { label: "属性", value: "key" },
         { label: "描述", value: "value" },
+        { label: "用户名", value: "username" },
+        { label: "真实姓名", value: "truename" },
+        { label: "身份证", value: "card_id" },
     ],
 };
 export default {

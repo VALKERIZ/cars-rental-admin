@@ -14,45 +14,27 @@
 </template>
 
 <script>
-import { GetQiniuToken } from "@/api/common";
 export default {
   name: "",
   components: {},
   data() {
     return {
       imageUrl: "",
-      uploadData: {},
+      uploadData: {
+        token: this.$store.state.upload.qiniu_token,
+      },
       show: false,
     };
   },
   beforeMount() {
-    this.getQiniuToken();
+    if (
+      !this.$store.state.upload.qiniu_token &&
+      !this.$store.state.upload.isRequest
+    ) {
+      this.$store.dispatch("upload/getQiniuToken");
+    }
   },
   methods: {
-    getQiniuToken() {
-      // 在工作中，
-      const requestData = {
-        ak: "a0SdM7v6vh2cQ_GacNqlz0qs5pdLw4ZxO3bSJ8Gj",
-        sk: "Nb8TdqBXusTen2IB6VN9kDpbdYLIqS2emBlD_SyH",
-        buckety: "cars-zsb",
-      };
-      GetQiniuToken(requestData)
-        .then((response) => {
-          const data = response.data;
-          if (data.token) {
-            this.uploadData.token = data.token;
-            this.show = true;
-          }
-        })
-        .catch((e) => {
-          console.log("getQiniuToken error", e);
-          this.getQiniuToken();
-        });
-    },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = `http://ql1yue6tv.hn-bkt.clouddn.com/${res.key}`;
-      this.$emit("update:imgUrl", this.imageUrl);
-    },
     // 上传之前
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg" || file.type === "image/png";
@@ -68,6 +50,11 @@ export default {
       this.uploadData.key = key;
       return isJPG && isLt2M;
     },
+    // 上传成功
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = `http://ql1yue6tv.hn-bkt.clouddn.com/${res.key}`;
+      this.$emit("update:imgUrl", this.imageUrl);
+    },
   },
   props: {
     imgUrl: {
@@ -81,6 +68,15 @@ export default {
       handler(newV) {
         if (newV !== this.imageUrl) {
           this.imageUrl = newV;
+        }
+      },
+    },
+    "$store.state.upload.qiniu_token": {
+      immediate: true,
+      handler(newV) {
+        if (newV) {
+          this.uploadData.token = newV;
+          this.show = true;
         }
       },
     },

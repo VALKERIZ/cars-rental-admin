@@ -20,7 +20,6 @@ const routes = [{
         meta: {
             title: "控制台",
             icon: "console",
-            iconClass: "icon_console",
         },
         component: Layout,
         children: [{
@@ -39,8 +38,7 @@ const routes = [{
         name: "Parking",
         meta: {
             title: "停车场",
-            icon: "console",
-            iconClass: "icon_console",
+            icon: "parking",
         },
         component: Layout,
         children: [{
@@ -69,8 +67,7 @@ const routes = [{
         name: "CarsBrand",
         meta: {
             title: "车辆品牌",
-            icon: "console",
-            iconClass: "icon_console",
+            icon: "brand",
         },
         component: Layout,
         children: [{
@@ -89,8 +86,7 @@ const routes = [{
         name: "cars",
         meta: {
             title: "车辆管理",
-            icon: "console",
-            iconClass: "icon_console",
+            icon: "cars",
         },
         component: Layout,
         children: [{
@@ -128,8 +124,7 @@ const routes = [{
         name: "Sale",
         meta: {
             title: "销售管理",
-            icon: "console",
-            iconClass: "icon_console",
+            icon: "sale",
         },
         component: Layout,
         children: [{
@@ -141,6 +136,36 @@ const routes = [{
             component: () =>
                 import ("../views/Sale/leaseList.vue"),
         }, ],
+    },
+    // 会员管理
+    {
+        path: "/member",
+        name: "Member",
+        meta: {
+            title: "会员管理",
+            icon: "member",
+        },
+        component: Layout,
+        children: [{
+                path: "/memberList",
+                name: "MemberList",
+                meta: {
+                    title: "会员列表",
+                },
+                component: () =>
+                    import ("../views/Member/index.vue"),
+            },
+            {
+                path: "/memberInfo",
+                name: "MemberInfo",
+                hidden: true,
+                meta: {
+                    title: "会员编辑",
+                },
+                component: () =>
+                    import ("../views/Member/memberInfo.vue"),
+            },
+        ],
     },
 ];
 

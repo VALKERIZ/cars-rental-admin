@@ -113,8 +113,8 @@ export default {
       }
     },
     clear() {
-      console.log("cityArea clear!");
       this.value = "";
+      this.$emit("update:cityAreaValue", this.value);
     },
   },
   components: {},

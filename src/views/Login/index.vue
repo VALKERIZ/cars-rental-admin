@@ -184,13 +184,12 @@ export default {
       code_loading.value = true;
       GetCode(requestData)
         .then((response) => {
-          console.log(response); // 这里打印拦截器返回的信息，response是自定义参数。
           root.$message({
             message: response.message,
             type: "success",
           });
           let code = response.message.split("：")[1];
-          this.form.code = code;
+          form.code = code;
           // 激活按钮
           submit_disabled.value = false;
           // 清除加载

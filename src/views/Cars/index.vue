@@ -91,13 +91,14 @@ export default {
             width: "120px",
             options: "parking_type",
           },
-          {
-            label: "禁启用",
-            prop: "status",
-            type: "Select",
-            width: "120px",
-            options: "radio_disabled",
-          },
+          // 禁用的value为false（boolean），多选框options组件value的可选类型为string/number/object，所以选中后值会变成undefined，从而无法添加到表单中
+          // {
+          //   label: "禁启用",
+          //   prop: "status",
+          //   type: "Select",
+          //   width: "120px",
+          //   options: "radio_disabled",
+          // },
           {
             label: "关键字",
             type: "Keyword",

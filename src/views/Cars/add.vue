@@ -68,6 +68,7 @@
           :value.sync="form_data.carsAttr"
         />
       </template>
+      <!-- 租赁价格 -->
       <template v-slot:leaseList>
         <el-row :gutter="20">
           <el-col
@@ -155,7 +156,7 @@ export default {
         {
           type: "Upload",
           label: "缩略图",
-          slotName: "carsImg",
+          prop: "carsImg",
           required: true,
         },
         {

@@ -66,7 +66,7 @@ export default {
             label: "车辆品牌",
             prop: "brand",
             type: "Input",
-            width: "150px",
+            width: "250px",
             options: "parking_type",
             placeholder: "请输入车辆品牌",
           },

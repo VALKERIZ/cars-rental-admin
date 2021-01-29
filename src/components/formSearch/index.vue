@@ -27,16 +27,16 @@
       >
         <el-option
           v-for="selectItem in item.options"
-          :key="selectItem.value || selectItem[item.select_vlaue]"
-          :value="selectItem.value || selectItem[item.select_vlaue]"
+          :key="selectItem.value || selectItem[item.select_value]"
+          :value="selectItem.value || selectItem[item.select_value]"
           :label="selectItem.label || selectItem[item.select_label]"
         ></el-option>
       </el-select>
-      <!-- city-->
+      <!-- 城市-->
       <div v-if="item.type === 'City'">
         <CityArea ref="city" :cityAreaValue.sync="city_value" />
       </div>
-      <!-- city-->
+      <!-- 关键词-->
       <div v-if="item.type === 'Keyword'">
         <KeyWord ref="keyword" :options="item.options" :value.sync="keyword" />
       </div>
@@ -69,10 +69,6 @@
         >
           {{ item.label }}
         </el-button>
-
-        <!-- <el-button v-for="item in formHandler" :key="item.key" :type="item.type" @click="item.handler && item.handler()">
-                        {{ item.label }}
-                    </el-button> -->
       </template>
     </el-form-item>
   </el-form>
@@ -111,11 +107,14 @@ export default {
     search() {
       const searchData = {};
       // 过滤空数据
+      console.log(this.form_data);
       for (let key in this.form_data) {
         if (this.form_data[key]) {
           searchData[key] = this.form_data[key];
         }
       }
+      console.log(this.form_data);
+
       /**  组件 */
       // 关键字
       if (this.$refs.keyword && this.keyword.key && this.keyword.value) {

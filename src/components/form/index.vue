@@ -15,6 +15,14 @@
         :style="{ width: item.width ? item.width : '300px' }"
         :disabled="item.disabled"
       ></el-input>
+      <!-- InputNumber -->
+      <el-input-number
+        v-if="item.type === 'InputNumber'"
+        v-model="formData[item.prop]"
+        controls-position="right"
+        :min="item.min || 0"
+        :max="item.max || 10000"
+      ></el-input-number>
       <!-- textarea -->
       <el-input
         type="textarea"
@@ -135,6 +143,7 @@ export default {
         Input: "请输入",
         Radio: "请选择",
         Select: "请选择",
+        Upload: "请上传",
       },
       // 清除富文本
       wangeditorClear: false, // true false
