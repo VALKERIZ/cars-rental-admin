@@ -1,5 +1,5 @@
 import service from "../utils/request";
-/** 标志 */
+/** 获取汽车标志 */
 export function BrandLogo(data = {}) {
     return service.request({
         method: "post",
@@ -17,15 +17,6 @@ export function BrandAdd(data = {}) {
     });
 }
 
-/** 删除 */
-export function BrandDelete(data = {}) {
-    return service.request({
-        method: "post",
-        url: "/brand/delete/",
-        data,
-    });
-}
-
 /** 禁启用 */
 export function BrandStatus(data = {}) {
     return service.request({
@@ -34,15 +25,6 @@ export function BrandStatus(data = {}) {
         data,
     });
 }
-
-/** 详情 */
-// export function BrandDetailed(data = {}){
-//     return service.request({
-//         method: "post",
-//         url: "/brand/detailed/",
-//         data
-//     })
-// }
 
 /** 修改 */
 export function BrandEdit(data = {}) {

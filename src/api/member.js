@@ -8,7 +8,7 @@ export function Detailed(data = {}) {
     });
 }
 
-/** 会员修改 */
+/** 会员信息修改 */
 export function Edit(data = {}) {
     return service.request({
         method: "post",

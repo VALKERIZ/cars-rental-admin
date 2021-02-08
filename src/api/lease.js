@@ -34,11 +34,3 @@ export function LeaseEdit(data = {}) {
         data,
     });
 }
-/** 删除 */
-export function LeaseDelete(data = {}) {
-    return service.request({
-        method: "post",
-        url: "/lease/delete/",
-        data,
-    });
-}

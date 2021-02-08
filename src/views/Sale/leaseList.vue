@@ -19,7 +19,6 @@ export default {
     return {
       // 表格配置
       table_config: {
-        checkbox: false,
         pagination: false,
         thead: [
           { label: "租车类型", prop: "carsLeaseTypeName", width: 200 },

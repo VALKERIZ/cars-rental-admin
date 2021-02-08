@@ -47,7 +47,7 @@ export default {
     },
     close() {
       this.$refs.aMap.mapDestroy();
-      this.$emit("update:flagVisible", false); // {}
+      this.$emit("update:flagVisible", false);
     },
   },
   watch: {

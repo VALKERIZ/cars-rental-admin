@@ -111,6 +111,7 @@ export default {
         });
       }
     },
+    /** 清空，初始化 */
     clear() {
       this.initValueFlag = false;
       this.initValue = "请选择省市区";

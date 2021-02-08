@@ -59,7 +59,7 @@ export default {
   },
   watch: {
     options: {
-      handler(newValue) {
+      handler() {
         this.initOptions();
       },
       immediate: true,

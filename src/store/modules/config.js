@@ -65,11 +65,6 @@ const state = {
         { label: "男", value: 1 },
         { label: "女", value: 2 },
     ],
-    // 黑名单
-    blacklist: [
-        { label: "是", value: true },
-        { label: "否", value: false },
-    ],
     // 关键字搜索
     keyword_options: [
         { label: "停车场名称", value: "parkingName" },
@@ -79,8 +74,8 @@ const state = {
         { label: "用户名", value: "username" },
         { label: "真实姓名", value: "truename" },
         { label: "身份证", value: "card_id" },
-        { label: "订单号", value: "order_no" },
-        { label: "订单状态", value: "order_status" },
+        // { label: "订单号", value: "order_no" },
+        // { label: "订单状态", value: "order_status" },
     ],
     // 订单状态
     order_status: {
@@ -108,7 +103,7 @@ const state = {
         DRIVING: {
             zh: "行驶中",
         },
-        CHEDK: {
+        CHECK: {
             zh: "年检",
         },
         MAINTAIN: {

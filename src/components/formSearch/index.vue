@@ -135,7 +135,7 @@ export default {
         this.$refs.city[0].clear();
       }
       //关键字
-      if (this.$refs.keyword[0]) {
+      if (this.$refs.keyword && this.$refs.keyword[0]) {
         this.$refs.keyword[0].clear();
       }
     },

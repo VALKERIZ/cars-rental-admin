@@ -78,7 +78,6 @@
       <!-- 富文本编辑器 -->
       <template v-if="item.type === 'Wangeditor'">
         <Wangeditor
-          :isClear="wangeditorClear"
           ref="wangeditor"
           :value="formData[item.prop]"
           :content.sync="formData[item.prop]"
@@ -143,8 +142,6 @@ export default {
         Select: "请选择",
         Upload: "请上传",
       },
-      // 清除富文本
-      wangeditorClear: false, // true false
     };
   },
   methods: {
@@ -153,12 +150,12 @@ export default {
       this.$refs.form.resetFields();
       // 清除富文本内容
       if (this.$refs.wangeditor) {
-        this.wangeditorClear = !this.wangeditorClear;
+        this.$refs.wangeditor.clear();
       }
     },
     initFormData() {
       this.formItme.forEach((item) => {
-        // rules 规则
+        // rules 规则拼接
         if (item.required) {
           this.rules(item);
         }
@@ -187,7 +184,7 @@ export default {
   },
   watch: {
     formItme: {
-      handler(newValue) {
+      handler() {
         this.initFormData();
       },
       immediate: true,

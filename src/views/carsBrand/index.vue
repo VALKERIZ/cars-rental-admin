@@ -6,7 +6,7 @@
       :flagVisible.sync="dialog_show"
       :data="data_brand"
       @callbackComponent="callbackComponent"
-    /><!--父组件往子组件传数据时，是一个单向数据流-->
+    />
   </div>
 </template>
 <script>
@@ -26,14 +26,17 @@ export default {
             label: "LOGO",
             prop: "imgUrl",
             type: "image",
-            width: 150,
+            width: 120,
           },
           {
-            label: "车辆品牌",
-            prop: "nameCh",
-            type: "function",
-            callback: (row, prop) => `${row.nameCh}/${row.nameEn}`,
+            label: "车辆品牌(英)",
+            prop: "nameEn",
           },
+          {
+            label: "车辆品牌(中)",
+            prop: "nameCh",
+          },
+
           {
             label: "禁启用",
             prop: "status",
@@ -86,15 +89,12 @@ export default {
           searchButton: true,
         },
       },
+      // 当前表格项数据
       data_brand: {},
       // 禁启用开关
       switch_disabled: "",
       // 弹窗标记
       dialog_show: false,
-      // 搜索栏表单
-      form: {
-        brand: "",
-      },
     };
   },
   methods: {
@@ -102,18 +102,6 @@ export default {
       if (params.function) {
         this[params.function]();
       }
-    },
-    /** 搜索 */
-    search() {
-      const requestData = {
-        pageSize: 10,
-        pageNumber: 1,
-      };
-      if (this.form.brand) {
-        requestData.brand = this.form.brand;
-      }
-      // 调用子组件的方法
-      this.$refs.table.requestData(requestData);
     },
     loadData() {
       this.$refs.table.requestData();
@@ -140,7 +128,7 @@ export default {
         })
         .catch((error) => {
           this.switch_disabled = "";
-          this.switchChange(data);
+          console.log("BrandStatus error", error);
         });
     },
   },

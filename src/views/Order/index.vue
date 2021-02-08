@@ -22,7 +22,6 @@ export default {
     return {
       // 表格配置
       table_config: {
-        checkbox: false,
         thead: [
           { label: "订单号", prop: "order_no" },
           {
@@ -127,36 +126,6 @@ export default {
       if (params.function) {
         this[params.function](params.data);
       }
-    },
-    /** 禁启用 */
-    switchChange(data) {
-      if (this.switch_flag) {
-        return false;
-      }
-      const requestData = {
-        id: data.id,
-        status: data.status,
-      };
-      // this.switch_flag = true;
-      this.switch_disabled = data.id; // 第一种方式：组件本身的属性处理
-      CarsStatus(requestData)
-        .then((response) => {
-          this.$message({
-            type: "success",
-            message: response.message,
-          });
-          this.switch_disabled = "";
-          // this.switch_flag = false;
-        })
-        .catch((error) => {
-          this.switch_disabled = "";
-          // this.switch_flag = false;
-        });
-    },
-    /** 显示地图 */
-    showMap(data) {
-      this.map_show = true;
-      this.parking_data = data;
     },
     orderWait(data) {
       OrderWait({

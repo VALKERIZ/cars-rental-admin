@@ -9,7 +9,7 @@
       @callbackComponent="callbackComponent"
     />
     <!-- 二.插槽 -->
-    <slot name="typeList"></slot>
+    <slot name="middle"></slot>
     <!-- 三.表格 -->
     <el-table
       v-loading="loading_table"
@@ -18,13 +18,7 @@
       border
       style="width: 100%"
     >
-      <!-- 1.第一列：多选框 -->
-      <el-table-column
-        v-if="table_config.checkbox"
-        type="selection"
-        width="40"
-      ></el-table-column>
-      <!-- 2.其余表头 -->
+      <!-- 表头 -->
       <template v-for="item in this.table_config.thead">
         <!--回调-->
         <el-table-column
@@ -89,6 +83,7 @@
             />
           </template>
         </el-table-column>
+        <!-- 操作 -->
         <el-table-column
           v-else-if="item.type === 'operation'"
           :key="item.prop"
@@ -153,7 +148,7 @@
       </template>
     </el-table>
 
-    <!-- 分页 -->
+    <!-- 四.分页 -->
     <el-row class="padding-top-30">
       <el-col :span="4"><div style="padding: 5px;"></div></el-col>
       <el-col :span="20">
@@ -179,9 +174,6 @@
 import FormSearch from "@/components/formSearch";
 // API
 import { GetTableData, Delete } from "@/api/common";
-import { ParkingList } from "@/api/parking";
-// API
-import { CarsDelete } from "@/api/cars";
 export default {
   name: "TableData",
   components: { FormSearch },
@@ -195,7 +187,6 @@ export default {
         // 初始化是否请求接口
         isRequest: true,
         thead: [],
-        checkbox: true,
         url: "",
         pagination: true,
         // 分页相关参数
@@ -206,7 +197,7 @@ export default {
         form_handler: [],
         form_config: {},
       },
-      // 页码
+      // 数据条数
       total: 0,
       // 当前页码
       currentPage: 1,
@@ -220,6 +211,7 @@ export default {
     callbackComponent(params) {
       this[params.function](params.data);
     },
+    // 回调
     search(data) {
       const searchData = data;
       searchData.pageNumber = 1;
@@ -249,14 +241,13 @@ export default {
           if (data) {
             this.table_data = data.data;
           }
-          // 页码
+          // 数据总量（条）
           this.total = data.total;
           this.loading_table = false;
         })
         .catch((error) => {
           this.loading_table = false;
           console.log("loadData error", error);
-          this.loadData();
         });
     },
     requestData(params = "") {
@@ -271,7 +262,7 @@ export default {
       this.table_config.data.pageSize = val;
       this.loadData();
     },
-    /** 页码切换 */
+    /** 当前是第几页 */
     handleCurrentChange(val) {
       this.table_config.data.pageNumber = val;
       this.loadData();
@@ -284,28 +275,27 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      })
-        .then(() => {
-          this.rowId = id;
-          let requestData = {
-            url: this.table_config.url + "Delete",
-            data: { id },
-          };
-          Delete(requestData)
-            .then((response) => {
-              this.$message({
-                type: "success",
-                message: response.message,
-              });
-              this.rowId = "";
-              // 调用子组件的方法
-              this.loadData();
-            })
-            .cacth((error) => {
-              this.rowId = "";
+      }).then(() => {
+        this.rowId = id;
+        let requestData = {
+          url: this.table_config.url + "Delete",
+          data: { id },
+        };
+        Delete(requestData)
+          .then((response) => {
+            this.$message({
+              type: "success",
+              message: response.message,
             });
-        })
-        .catch(() => {});
+            this.rowId = "";
+            // 调用子组件的方法
+            this.loadData();
+          })
+          .cacth((error) => {
+            console.log("Delete error", error);
+            this.rowId = "";
+          });
+      });
     },
     /** 编辑 */
     edit(id, routerNmae) {
@@ -337,7 +327,7 @@ export default {
       immediate: true,
     },
     "$store.state.common.table_loadData_flag": {
-      handler(newValue) {
+      handler() {
         this.loadData();
       },
     },

@@ -16,9 +16,6 @@
       <template v-slot:logo>
         <div class="upload-img-wrap">
           <Upload :imgUrl.sync="form_data.imgUrl" />
-          <!-- <div class="upload-img">
-            <img v-show="logo_current" :src="logo_current" />
-          </div> -->
           <ul class="img-list">
             <li
               v-for="item in logo"
@@ -75,18 +72,18 @@ export default {
       form_item: [
         {
           type: "Input",
-          label: "品牌中文",
-          prop: "nameCh",
-          placeholder: "请输入品牌中文",
+          label: "车辆品牌(英)",
+          prop: "nameEn",
+          placeholder: "请输入品牌英文",
           validator: [
             { validator: validateName, trigger: "blur", required: true },
           ],
         },
         {
           type: "Input",
-          label: "品牌英文",
-          prop: "nameEn",
-          placeholder: "请输入品牌英文",
+          label: "车辆品牌(中)",
+          prop: "nameCh",
+          placeholder: "请输入品牌中文",
           validator: [
             { validator: validateName, trigger: "blur", required: true },
           ],
@@ -137,7 +134,6 @@ export default {
         })
         .catch((e) => {
           console.log("getBrandLogo error", e);
-          this.getBrandLogo();
         });
     },
     /** 确定按钮->提交表单 */
@@ -178,6 +174,7 @@ export default {
     close() {
       // 关闭窗口
       this.dialogVisible = false;
+      // 表单重置
       // this.reset();
       this.form_data = {
         nameCh: "",
@@ -194,15 +191,13 @@ export default {
   },
   watch: {
     flagVisible: {
-      handler(newValue, oldValue) {
+      handler(newValue) {
         this.dialogVisible = newValue;
       },
     },
     data: {
       handler(newV) {
-        console.log(newV);
         this.form_data = newV;
-        // this.form_data.imgUrl = newV.imgUrl;
       },
     },
   },

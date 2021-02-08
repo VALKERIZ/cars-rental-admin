@@ -36,15 +36,6 @@ export function CarsStatus(data = {}) {
     });
 }
 
-/** 删除 */
-export function CarsDelete(data = {}) {
-    return service.request({
-        method: "post",
-        url: "/cars/delete/",
-        data,
-    });
-}
-
 /** 释放车辆 */
 export function CarsRelease(data = {}) {
     return service.request({

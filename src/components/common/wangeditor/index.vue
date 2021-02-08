@@ -16,21 +16,17 @@ export default {
     this.editor.create(); // 创建富文本实例
   },
   props: {
-    isClear: {
-      type: Boolean,
-      default: false,
-    },
     value: {
       type: String,
       default: "",
     },
   },
-  watch: {
-    isClear: {
-      handler() {
-        this.editor.txt.clear();
-      },
+  methods: {
+    clear() {
+      this.editor.txt.clear();
     },
+  },
+  watch: {
     value: {
       handler(newValue) {
         this.editor.txt.html(newValue);

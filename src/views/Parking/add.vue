@@ -37,8 +37,8 @@ import { ParkingAdd, ParkingDetailed, ParkingEdit } from "@/api/parking";
 export default {
   name: "ParkingAdd",
   data() {
-    const validateCity = (rule, value, callback) => {
-      if (!value) {
+    const validate = (rule, value, callback) => {
+      if (!value || value == "") {
         callback(new Error("请输入省市区"));
       } else {
         callback();
@@ -70,7 +70,7 @@ export default {
           prop: "area",
           label: "区域",
           validator: [
-            { validator: validateCity, trigger: "change", required: true },
+            { validator: validate, trigger: "change", required: true },
           ],
         },
         {
@@ -78,7 +78,7 @@ export default {
           label: "详细地址",
           placeholder: "请输入详细地址",
           prop: "address",
-          width: "50%",
+          width: "30%",
           required: true,
         },
         {
@@ -104,10 +104,17 @@ export default {
         {
           type: "Input",
           label: "经纬度",
-          placeholder: "请在地图中进行位置选择",
+          placeholder: "请在地图中进行地点选择",
           prop: "lnglat",
           disabled: true,
-          required: true,
+          validator: [
+            {
+              validator: validate,
+              trigger: "change",
+              required: true,
+              message: "请选择地点",
+            },
+          ],
         },
       ],
       form_handler: [

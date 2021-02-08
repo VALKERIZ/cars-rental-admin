@@ -27,6 +27,7 @@ export default {
     };
   },
   beforeMount() {
+    // 如果当前没有七牛云的token且还未进行对该token的获取请求，则进行token的请求
     if (
       !this.$store.state.upload.qiniu_token &&
       !this.$store.state.upload.isRequest
@@ -37,10 +38,10 @@ export default {
   methods: {
     // 上传之前
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg" || file.type === "image/png";
+      const type = file.type === "image/jpeg" || file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+      if (!type) {
+        this.$message.error("上传图片只能是 JPG 和 PNG 格式!");
       }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
@@ -48,7 +49,7 @@ export default {
       let fileName = file.name;
       let key = encodeURI(fileName);
       this.uploadData.key = key;
-      return isJPG && isLt2M;
+      return type && isLt2M;
     },
     // 上传成功
     handleAvatarSuccess(res, file) {

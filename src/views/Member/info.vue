@@ -13,8 +13,6 @@
 import VueForm from "@c/form";
 // API
 import { Detailed, Edit } from "@/api/member";
-// utils - format
-import { formatRequestData } from "@/utils/format";
 export default {
   name: "MemberInfo",
   data() {
@@ -132,15 +130,22 @@ export default {
   methods: {
     detailed() {
       Detailed({ id: this.id }).then((response) => {
-        const data = formatRequestData(this.form_data, response.data);
-        this.form_data = data;
+        const data = response.data;
+        //格式化请求数据的参数(过滤)
+        const obj = {};
+        for (let key in this.form_data) {
+          if (Object.keys(data).includes(key)) {
+            obj[key] = data[key];
+          }
+        }
+        this.form_data = obj;
       });
     },
     /** 提交表单 */
     formValidate() {
       this.$refs.vuForm.$refs.form.validate((valid) => {
         if (valid) {
-          this.id && this.editMember();
+          this.id && this.edit();
         } else {
           console.log("error submit!!");
           return false;
@@ -148,8 +153,7 @@ export default {
       });
     },
     // 编辑
-    editMember() {
-      // ...扩展
+    edit() {
       Edit({ ...this.form_data, id: this.id }).then((response) => {
         this.$message({
           message: response.message,

@@ -2,7 +2,7 @@
   <div>
     <TabalData ref="table" :config="table_config">
       <!--车辆公共属性-->
-      <template v-slot:typeList>
+      <template v-slot:middle>
         <div class="margin-bottom-25">
           <el-button
             :type="cars_list_basis_type_id == item.id ? 'danger' : ''"
@@ -39,8 +39,6 @@ export default {
       table_config: {
         // 不初始化请求
         isRequest: false,
-        // 不使用多选框
-        checkbox: false,
         // 不分页
         pagination: false,
         thead: [
