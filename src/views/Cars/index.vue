@@ -10,7 +10,7 @@ import CityArea from "@c/common/cityArea";
 import MapLocation from "@c/dialog/showMapLocation";
 import TabalData from "@c/tableData";
 // API
-import { CarsStatus } from "@/api/cars";
+import { CarsStatus, CarsRelease } from "@/api/cars";
 // common
 import { address, yearCheckType, energyType } from "@/utils/common";
 export default {
@@ -52,6 +52,16 @@ export default {
             type: "switch",
             handler: (value, data) => this.switchChange(value, data),
           },
+          {
+            label: "车辆状态",
+            prop: "cars_status",
+            type: "function",
+            callback: (row) => {
+              const carsStatus = this.$store.state.config.cars_status;
+              const status = carsStatus[row.carsStatus];
+              return status ? status.zh : "";
+            },
+          },
           { label: "停车场", prop: "parkingName" },
           {
             label: "区域",
@@ -73,6 +83,11 @@ export default {
                 name: "CarsAdd",
                 key: "id",
                 value: "id",
+              },
+              {
+                label: "车辆释放",
+                event: "button",
+                handler: (data) => this.release(data),
               },
             ],
           },
@@ -156,6 +171,9 @@ export default {
     showMap(data) {
       this.map_show = true;
       this.parking_data = data;
+    },
+    release(data) {
+      CarsRelease({ id: data.id });
     },
   },
 };

@@ -3,7 +3,7 @@
     <div class="form-wrap">
       <ul class="menu-tab">
         <li
-          @click="toggleHigh(item.type)"
+          @click="toggleModel(item.type)"
           :class="{ current: current_menu === item.type }"
           v-for="item in menu_switch_item"
           :key="item.type"
@@ -58,10 +58,9 @@
 
 <script>
 import sha1 from "js-sha1";
-import { reactive, ref, set } from "@vue/composition-api";
+import { reactive, ref } from "@vue/composition-api";
 import { validate_email, validate_password } from "@/utils/validate";
-import { GetCode, Register, Login } from "@/api/login";
-import { mapStat } from "vuex";
+import { GetCode, Register } from "@/api/login";
 export default {
   name: "Login",
   setup(props, { root, refs }) {
@@ -82,7 +81,7 @@ export default {
     let timer = ref(null);
     let submit_disabled = ref(true);
     /**
-     * 自定义检验规则
+     * 自定义检验回调
      */
     // 检验邮箱
     const validate_name_rules = (rule, value, callback) => {
@@ -141,8 +140,8 @@ export default {
       passwords: [{ validator: validate_passwords_rules, trigger: "blur" }],
       code: [{ validator: validate_code_rules, trigger: "blur" }],
     });
-    // 切换样式方法
-    const toggleHigh = (type) => {
+    // 切换登录和注册两种模式
+    const toggleModel = (type) => {
       current_menu.value = type;
     };
     // 倒计时
@@ -188,6 +187,7 @@ export default {
             message: response.message,
             type: "success",
           });
+          // 自动填写（表单赋值）
           let code = response.message.split("：")[1];
           form.code = code;
           // 激活按钮
@@ -270,7 +270,7 @@ export default {
       code_loading,
       code_disabled,
       submit_disabled,
-      toggleHigh,
+      toggleModel,
       getCodeFn,
       submitForm,
       login,

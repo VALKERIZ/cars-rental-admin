@@ -15,5 +15,8 @@ const requestUrl = {
     // 会员 - 列表
     memberList: "/member/list/",
     memberListDelete: "/member/delete/",
+    // 订单列表
+    orderList: "/order/list/",
+    // orderListDelete: "/order/delete/",
 };
 export default requestUrl;

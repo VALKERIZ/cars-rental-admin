@@ -45,6 +45,15 @@ export function CarsDelete(data = {}) {
     });
 }
 
+/** 释放车辆 */
+export function CarsRelease(data = {}) {
+    return service.request({
+        method: "post",
+        url: "/cars/lock/",
+        data,
+    });
+}
+
 /** 添加 */
 // export function CarsAdd(data = {}) {
 //     return service.request({

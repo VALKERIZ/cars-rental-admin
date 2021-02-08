@@ -14,6 +14,9 @@
 <script>
 import TabalData from "@c/tableData";
 
+// API
+import { AuthChange, AmountClear } from "@/api/member";
+
 export default {
   name: "Merber",
   components: { TabalData },
@@ -35,37 +38,46 @@ export default {
           {
             label: "租车订单",
             prop: "order",
-            width: 150,
           },
           {
             label: "违章预存金",
             prop: "illegalAmount",
-            width: 200,
+            width: 100,
+          },
+          {
+            label: "压金",
+            prop: "gilding",
+            width: 100,
+          },
+          {
+            label: "余额",
+            prop: "amount",
+            width: 100,
           },
           {
             label: "实名认证",
             prop: "check_real_name",
-            type: "function",
-            callback: (row) => {
-              return row.check_real_name ? "已认证" : "-";
-            },
+            type: "switch",
+            width: 100,
+            handler: (status, data) =>
+              this.authChange(status, data, "identity"),
           },
           {
             label: "驾驶证",
             prop: "check_cars",
-            type: "function",
-            callback: (row) => {
-              return row.check_cars ? "已认证" : "-";
-            },
+            type: "switch",
+            width: 100,
+            handler: (status, data) => this.authChange(status, data, "drive"),
           },
-          {
-            label: "黑名单",
-            prop: "blacklist",
-            type: "function",
-            callback: (row) => {
-              return row.blacklist ? "是" : "-";
-            },
-          },
+          // {
+          //   label: "黑名单",
+          //   prop: "blacklist",
+          //   type: "function",
+          //   callback: (row) => {
+          //     return row.blacklist ? "是" : "-";
+          //   },
+          //   width: 100,
+          // },
           {
             label: "操作",
             type: "operation",
@@ -78,6 +90,11 @@ export default {
                 name: "MemberInfo",
                 key: "id",
                 value: "memberId",
+              },
+              {
+                event: "button",
+                label: "金额清空",
+                handler: (data) => this.amountClear(data),
               },
             ],
             default: {
@@ -105,7 +122,34 @@ export default {
       },
     };
   },
-  methods: {},
+  methods: {
+    // 身份认证改变
+    authChange(status, data, type) {
+      console.log(status, data, type);
+      AuthChange({
+        id: data.memberId,
+        status,
+        type,
+      }).then((response) => {
+        this.$message({
+          type: "success",
+          message: response.message,
+        });
+      });
+    },
+    // 金额清空
+    amountClear(data) {
+      console.log(data);
+      AmountClear({
+        member_id: data.memberId,
+      }).then((response) => {
+        this.$message({
+          type: "success",
+          message: response.message,
+        });
+      });
+    },
+  },
 };
 </script>
 <style lass="scss" scoped></style>

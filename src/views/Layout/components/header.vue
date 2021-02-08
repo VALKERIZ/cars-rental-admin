@@ -1,14 +1,18 @@
 <template>
   <el-row>
+    <!-- 侧边栏缩放控制 -->
     <el-col :span="12">
       <span class="menu-btn" @click="switchAside">
         <svg-icon icon="menuBtn" className="icon-menu-btn"></svg-icon>
       </span>
     </el-col>
+
     <el-col :span="12">
+      <!-- 退出登录 -->
       <span class="logout" @click="logout">
         <svg-icon icon="logout" className="icon-logout"></svg-icon>
       </span>
+      <!-- 用户名称和头像 -->
       <div class="face-info">
         <img src="../../../assets/face.png" :alt="username" />
         <span class="name">{{ username }}</span>

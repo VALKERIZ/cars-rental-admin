@@ -36,6 +36,7 @@
         >
           <template slot-scope="scope">
             <span
+              style="{width:item.width}"
               v-html="item.callback && item.callback(scope.row, item.prop)"
             ></span>
           </template>

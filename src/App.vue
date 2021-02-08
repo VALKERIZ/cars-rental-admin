@@ -9,6 +9,7 @@
 <style lang="scss">
 #app {
 }
+// 页面载入的过渡效果
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.5s linear;

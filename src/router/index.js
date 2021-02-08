@@ -167,6 +167,25 @@ const routes = [{
             },
         ],
     },
+    // 订单管理
+    {
+        path: "/order",
+        name: "Order",
+        meta: {
+            title: "订单管理",
+            icon: "order",
+        },
+        component: Layout,
+        children: [{
+            path: "/orderList",
+            name: "OrderList",
+            meta: {
+                title: "订单列表",
+            },
+            component: () =>
+                import ("../views/Order/index.vue"),
+        }, ],
+    },
 ];
 
 const router = new VueRouter({

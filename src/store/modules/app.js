@@ -7,7 +7,7 @@ import {
 } from "@/utils/cookies";
 import { Login } from "@/api/login";
 const state = {
-    collapse: JSON.parse(sessionStorage.getItem("collapse")) || false,
+    collapse: JSON.parse(sessionStorage.getItem("collapse")) || false, //控制侧边栏收起和打开
     token: "",
     username: "" || getUsername(),
 };
@@ -29,7 +29,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             Login(requestData).then((response) => {
                 let data = response.data;
-                console.log("loginData", data);
+                // console.log("loginData", data);
                 content.commit("SET_TOKEN", data.token);
                 content.commit("SET_USERNAME", data.username);
                 setToken(data.token);

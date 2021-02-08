@@ -16,3 +16,21 @@ export function Edit(data = {}) {
         data,
     });
 }
+
+/** 会员认证状态修改 */
+export function AuthChange(data = {}) {
+    return service.request({
+        method: "post",
+        url: "/member/updateRealName/",
+        data,
+    });
+}
+
+/** 会员金额清空 */
+export function AmountClear(data = {}) {
+    return service.request({
+        method: "post",
+        url: "/member/amountClear/",
+        data,
+    });
+}
