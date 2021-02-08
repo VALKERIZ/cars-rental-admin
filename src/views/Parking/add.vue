@@ -164,7 +164,7 @@ export default {
             type: "primary",
             message: response.message,
           });
-          this.reset("form");
+          this.reset();
         })
         .catch((error) => {
           console.log("addParking error", error);

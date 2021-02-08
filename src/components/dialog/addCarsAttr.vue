@@ -1,5 +1,4 @@
 <template>
-  <!--dialog 弹窗-->
   <el-dialog
     title="车辆自定义属性添加"
     width="30%"
@@ -41,9 +40,9 @@ export default {
       dialogVisible: false,
       // 表单数据
       form_data: {
+        typeValue: "",
         key: "",
         value: "",
-        typeValue: "",
       },
       // 表单项
       form_item: [
@@ -66,12 +65,6 @@ export default {
           handler: () => this.formValidate(),
         },
       ],
-      // 状态
-      radio_disabled: this.$store.state.config.radio_disabled,
-      // 选中的LOGO
-      logo_current: "",
-      // logo
-      logo: [],
     };
   },
   methods: {

@@ -1,5 +1,5 @@
 <template>
-  <div>控制台</div>
+  <div>首页</div>
 </template>
 
 <script>

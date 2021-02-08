@@ -1,12 +1,10 @@
 <template>
   <div>
     <TabalData ref="table" :config="table_config"> </TabalData>
-    <MapLocation :flagVisible.sync="map_show" :data="parking_data" />
   </div>
 </template>
 <script>
 // 组件
-import MapLocation from "@c/dialog/showMapLocation";
 import TabalData from "@c/tableData";
 // API
 import { CarsStatus, CarsRelease } from "@/api/cars";
@@ -19,12 +17,13 @@ export default {
       // 表格配置
       table_config: {
         thead: [
-          { label: "车牌号", prop: "carsMode" },
-          { label: "车辆品牌", prop: "nameCh" },
+          { label: "车牌号", prop: "carsMode", width: 120 },
+          { label: "车辆品牌", prop: "nameCh", width: 120 },
           {
             label: "车辆LOGO",
             prop: "imgUrl",
             type: "image",
+            width: 90,
           },
           {
             label: "车辆图片",
@@ -36,20 +35,21 @@ export default {
             prop: "yearCheck",
             type: "function",
             callback: (row, prop) => yearCheckType(row[prop]),
-            width: "100px",
+            width: 80,
           },
           {
             label: "能源类型",
             prop: "energyType",
             type: "function",
             callback: (row, prop) => energyType(row[prop]),
-            width: "100px",
+            width: "80px",
           },
           {
             label: "禁启用",
             prop: "status",
             type: "switch",
             handler: (value, data) => this.switchChange(value, data),
+            width: 80,
           },
           {
             label: "车辆状态",
@@ -60,6 +60,7 @@ export default {
               const status = carsStatus[row.carsStatus];
               return status ? status.zh : "";
             },
+            width: 80,
           },
           { label: "停车场", prop: "parkingName" },
           {
@@ -99,24 +100,9 @@ export default {
         form_item: [
           { label: "城市", type: "City" },
           {
-            label: "类型",
-            prop: "parkingType",
-            type: "Select",
-            width: "120px",
-            options: "parking_type",
-          },
-          // 禁用的value为false（boolean），多选框options组件value的可选类型为string/number/object，所以选中后值会变成undefined，从而无法添加到表单中
-          // {
-          //   label: "禁启用",
-          //   prop: "status",
-          //   type: "Select",
-          //   width: "120px",
-          //   options: "radio_disabled",
-          // },
-          {
             label: "关键字",
             type: "Keyword",
-            options: ["parkingName", "address"],
+            options: ["carsMode", "carsBrand", "parkingName", "address"],
           },
         ],
         form_handler: [
@@ -134,13 +120,11 @@ export default {
         },
       },
       switch_disabled: "",
-      // 地图显示
-      map_show: false,
       parking_data: {},
       table_loading: false,
     };
   },
-  components: { MapLocation, TabalData },
+  components: { TabalData },
   methods: {
     callbackComponent(params) {
       if (params.function) {
@@ -164,15 +148,16 @@ export default {
         })
         .catch((error) => {
           this.switch_disabled = "";
+          console.log("CarsStatus error", error);
         });
     },
-    /** 显示地图 */
-    showMap(data) {
-      this.map_show = true;
-      this.parking_data = data;
-    },
     release(data) {
-      CarsRelease({ id: data.id });
+      CarsRelease({ id: data.id }).then((response) => {
+        this.$message({
+          type: "success",
+          message: response.message,
+        });
+      });
     },
   },
 };

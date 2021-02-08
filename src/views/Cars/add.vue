@@ -6,7 +6,7 @@
       :formItme="form_item"
       :formHandler="form_handler"
     >
-      <!-- 保养日期 -->
+      <!-- 1.保养日期 -->
       <template v-slot:maintain>
         <el-row :gutter="30">
           <el-col :span="6">
@@ -20,12 +20,9 @@
           </el-col>
         </el-row>
       </template>
-      <!-- 能源类型 -->
+      <!-- 2.能源类型 -->
       <template v-slot:energy>
-        <el-radio-group
-          v-model="form_data.energyType"
-          @change="changeEnergyType"
-        >
+        <el-radio-group v-model="form_data.energyType" @change="energyReset">
           <el-radio
             v-for="item in energyType"
             :key="item.value"
@@ -56,7 +53,7 @@
           </el-row>
         </div>
       </template>
-      <!-- 车辆属性 -->
+      <!-- 3.车辆属性 -->
       <template v-slot:carsAttr>
         <CarsAttr
           ref="carsAttr"
@@ -68,7 +65,7 @@
           :value.sync="form_data.carsAttr"
         />
       </template>
-      <!-- 租赁价格 -->
+      <!-- 4.租赁价格 -->
       <template v-slot:leaseList>
         <el-row :gutter="20">
           <el-col
@@ -157,7 +154,7 @@ export default {
           type: "Upload",
           label: "缩略图",
           prop: "carsImg",
-          // required: true,
+          required: true,
         },
         {
           type: "Input",
@@ -169,7 +166,6 @@ export default {
         {
           type: "Radio",
           label: "年检",
-          placeholder: "请选择年检",
           prop: "yearCheck",
           options: this.$store.state.config.year_check,
         },
@@ -230,7 +226,7 @@ export default {
           type: "danger",
           handler: () => this.formValidate(),
         },
-        { label: "重置", key: "reset" },
+        { label: "重置", key: "reset", handler: () => this.reset() },
       ],
       form_data: {
         parkingId: "",
@@ -243,7 +239,7 @@ export default {
         yearCheck: true,
         gear: 1,
         leasePrice: [],
-        energyType: 2,
+        energyType: 1,
         electric: 0,
         oil: 0,
         carsAttr: "",
@@ -268,10 +264,10 @@ export default {
       this.getDetailed();
     }
   },
-  mounted() {},
   methods: {
     formValidate() {
       this.formatCarsAttr();
+      console.log("223", this.form_data);
       this.$refs.vueForm.$refs.form.validate((valid) => {
         if (valid) {
           this.id ? this.edit() : this.add();
@@ -285,7 +281,6 @@ export default {
     formatCarsAttr() {
       this.$refs.carsAttr.callbackValue();
     },
-    /** edit */
     edit() {
       CarsInfoEdit({
         ...this.form_data,
@@ -304,8 +299,21 @@ export default {
           message: response.message,
           type: "success",
         });
-        this.$router.push({ path: "/carsIndex" });
+        // this.$router.push({ path: "/carsIndex" });
+        this.reset();
       });
+    },
+    // 重置
+    reset() {
+      //重置表单
+      this.$refs.vueForm.$refs.form.resetFields();
+      // 油量、电量重置
+      this.energyReset();
+      // 租赁价格还原
+      this.form_data.leasePrice.forEach((i) => {
+        i.price = 0;
+      });
+      // 车辆属性不重置
     },
     /** 获取详情 */
     getDetailed() {
@@ -324,7 +332,6 @@ export default {
         })
         .catch((e) => {
           console.log("getDetailed error", e);
-          this.getDetailed();
         });
     },
     /** 获取租赁列表 */
@@ -356,7 +363,6 @@ export default {
         })
         .catch((e) => {
           console.log("getCarsBrandList error", e);
-          this.getCarsBrandList();
         });
     },
     // 获取停车场
@@ -368,7 +374,6 @@ export default {
             const parking = this.form_item.filter(
               (item) => item.prop == "parkingId"
             );
-            console.log(parking);
             if (parking.length > 0) {
               parking[0].options = data;
             }
@@ -376,11 +381,9 @@ export default {
         })
         .catch((e) => {
           console.log("getParkingList error", e);
-          this.getParkingList();
         });
     },
-
-    changeEnergyType(value) {
+    energyReset() {
       this.form_data.oil = 0;
       this.form_data.electric = 0;
     },

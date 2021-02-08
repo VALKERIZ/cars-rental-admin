@@ -28,9 +28,7 @@
 import TabalData from "@c/tableData";
 import AddCarsAttr from "@c/dialog/addCarsAttr";
 // API
-import { GetCarsTypeBasis, GetCarsTypeList } from "@/api/carsAttr";
-// common
-import { address, yearCheckType, energyType } from "@/utils/common";
+import { GetCarsTypeBasis } from "@/api/carsAttr";
 export default {
   name: "CarsAttrlist",
   data() {
@@ -42,12 +40,10 @@ export default {
         // 不分页
         pagination: false,
         thead: [
-          { label: "属性", prop: "key" },
-          { label: "描述", prop: "value" },
+          { label: "属性(key)", prop: "key" },
+          { label: "描述(value)", prop: "value" },
         ],
         url: "carsAttrList", // 真实URL请求地址
-        data: {},
-        form_item: [],
         form_handler: [
           {
             label: "新增车辆属性",
@@ -68,7 +64,7 @@ export default {
       dialog_show: false,
       // 当前公用属性数据
       current_cars_type_data: {},
-      // 上传请求的typeId
+      // 上次请求的typeId
       last_type_id: "1",
     };
   },
@@ -85,7 +81,6 @@ export default {
     // 获取车辆属性初始化
     async getCarsType() {
       const data = await this.getCarsTypeBasis();
-      console.log(data);
       this.current_cars_type_data = data[0];
       this.cars_list_basis_type_id = data[0].id;
       //   默认表格加载列表第一项的数据
@@ -99,7 +94,7 @@ export default {
         return data;
       });
     },
-    // 点击按钮->请求对应属性数据
+    // 点击按钮->请求对应属性下的数据
     getTypeList(data) {
       if (data.id == this.last_type_id) {
         return;

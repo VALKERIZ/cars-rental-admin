@@ -67,13 +67,20 @@ const state = {
     ],
     // 关键字搜索
     keyword_options: [
+        //   停车场和车辆列表
         { label: "停车场名称", value: "parkingName" },
         { label: "详细区域", value: "address" },
+        { label: "车牌号", value: "carsMode" },
+        { label: "车辆品牌", value: "carsBrand" },
+        // 车辆自定义属性
         { label: "属性", value: "key" },
         { label: "描述", value: "value" },
+
+        // 用户管理
         { label: "用户名", value: "username" },
         { label: "真实姓名", value: "truename" },
         { label: "身份证", value: "card_id" },
+        // 订单管理
         // { label: "订单号", value: "order_no" },
         // { label: "订单状态", value: "order_status" },
     ],
