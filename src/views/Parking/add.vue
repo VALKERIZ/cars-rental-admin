@@ -37,33 +37,9 @@ import { ParkingAdd, ParkingDetailed, ParkingEdit } from "@/api/parking";
 export default {
   name: "ParkingAdd",
   data() {
-    let validatePass = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error("请输入停车场名称"));
-      } else {
-        callback();
-      }
-    };
-    let validateCity = (rule, value, callback) => {
+    const validateCity = (rule, value, callback) => {
       if (!value) {
         callback(new Error("请输入省市区"));
-      } else {
-        callback();
-      }
-    };
-    let validateLnglat = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error("请选择位置"));
-      } else {
-        callback();
-      }
-    };
-    let validateNumber = (rule, value, callback) => {
-      const regNumber = /^[0-9]*$/;
-      if (!value) {
-        callback(new Error("请输入可停放车辆"));
-      } else if (!regNumber.test(value)) {
-        callback(new Error("请输入数字"));
       } else {
         callback();
       }
@@ -79,16 +55,14 @@ export default {
         status: true,
         lnglat: "",
       },
-      // 表单配置
+      // 表单组件配置
       form_item: [
         {
           type: "Input",
           label: "停车场名称",
           placeholder: "请输入停车场名称",
           prop: "parkingName",
-          validator: [
-            { validator: validatePass, trigger: "change", required: true },
-          ],
+          required: true,
         },
         {
           type: "Slot",
@@ -115,13 +89,10 @@ export default {
           required: true,
         },
         {
-          type: "Input",
+          type: "InputNumber",
           label: "可停放车辆",
-          placeholder: "请输入数字类型",
           prop: "carsNumber",
-          validator: [
-            { validator: validateNumber, trigger: "change", required: true },
-          ],
+          required: true,
         },
         {
           type: "Radio",
@@ -137,9 +108,6 @@ export default {
           prop: "lnglat",
           disabled: true,
           required: true,
-          validator: [
-            { validator: validateLnglat, trigger: "change", required: true },
-          ],
         },
       ],
       form_handler: [
@@ -157,13 +125,9 @@ export default {
       option_map: {
         mapLoad: true,
       },
-      status: this.$store.state.config.radio_disabled,
-      type: this.$store.state.config.parking_type,
     };
   },
   components: { AMap, CityArea, VueForm },
-  beforeMount() {},
-  mounted() {},
   methods: {
     /** 确定按钮->提交表单 */
     formValidate() {
@@ -195,7 +159,9 @@ export default {
           });
           this.reset("form");
         })
-        .catch((error) => {});
+        .catch((error) => {
+          console.log("addParking error", error);
+        });
     },
     /** 修改停车场API */
     editParking() {
@@ -211,7 +177,9 @@ export default {
             name: "ParkingIndex",
           });
         })
-        .catch((error) => {});
+        .catch((error) => {
+          console.log("editParking error", error);
+        });
     },
     /** 获取详情 */
     getDetaile() {
@@ -225,7 +193,6 @@ export default {
           for (let key in data) {
             // 接口请求出来的
             if (Object.keys(this.form_data).includes(key)) {
-              // true  ["parkingName", "area", "address", "type", "carsNumber", "status", "lnglat", "content"].includes("region")
               this.form_data[key] = data[key];
             }
           }
@@ -242,7 +209,6 @@ export default {
         })
         .catch((e) => {
           console.log("getDetaile error", e);
-          this.getDetaile();
         });
     },
     // 回调函数

@@ -63,7 +63,7 @@
       </el-radio-group>
       <!-- slot -->
       <slot v-if="item.type === 'Slot'" :name="item.slotName" />
-      <!-- 省市区 -->
+      <!-- 单选 -->
       <el-radio-group
         v-if="item.type === 'Radio'"
         v-model="formData[item.prop]"
@@ -106,15 +106,13 @@
   </el-form>
 </template>
 <script>
-// 省市区
-import CityArea from "@c/common/cityArea";
 // 富文本
 import Wangeditor from "@c/common/wangeditor";
 // upload
 import Upload from "@c/upload";
 export default {
   name: "Form",
-  components: { CityArea, Wangeditor, Upload },
+  components: { Wangeditor, Upload },
   props: {
     labelWidth: {
       type: String,

@@ -101,7 +101,7 @@ import { GetCarsBrand, GetParking } from "@/api/common";
 import { CarsInfoAdd, CarsInfoEdit, CarsInfoDetailed } from "@/api/cars";
 import { LeaseList } from "@/api/lease";
 export default {
-  name: "ParkingAdd",
+  name: "CarsAdd",
   components: { VueForm, CarsAttr },
   data() {
     return {

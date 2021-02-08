@@ -12,10 +12,10 @@
 </template>
 
 <script>
-// AMAP
+// 组件
 import AMap from "@/views/amap";
 export default {
-  name: "",
+  name: "ShowMapLocation",
   components: { AMap },
   props: {
     flagVisible: {
@@ -41,9 +41,7 @@ export default {
         lat: splitLnglat[1],
       };
       this.$refs.aMap.mapCreate(splitLnglat);
-      // 调DOM元素的方法时，要确保DOM元素已被加载完成
       this.$nextTick(() => {
-        // DOM元素渲染完成后执行
         this.$refs.aMap.setMarker(lnglat);
       });
     },
@@ -54,17 +52,10 @@ export default {
   },
   watch: {
     flagVisible: {
-      handler(newValue, oldValue) {
+      handler(newValue) {
         this.dialogVisible = newValue;
       },
     },
-    // parking_data: {
-    //     handler(newValue, oldValue) {
-    //         console.log('newValuenewValuenewValuenewValue')
-    //         console.log(newValue)
-    //         this.data = newValue
-    //     }
-    // }
   },
 };
 </script>

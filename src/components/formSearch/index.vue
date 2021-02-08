@@ -107,14 +107,11 @@ export default {
     search() {
       const searchData = {};
       // 过滤空数据
-      console.log(this.form_data);
       for (let key in this.form_data) {
         if (this.form_data[key]) {
           searchData[key] = this.form_data[key];
         }
       }
-      console.log(this.form_data);
-
       /**  组件 */
       // 关键字
       if (this.$refs.keyword && this.keyword.key && this.keyword.value) {
@@ -124,6 +121,7 @@ export default {
       if (this.$refs.city && this.city_value) {
         searchData.area = this.city_value;
       }
+      console.log("searchData", searchData);
       this.$emit("callbackComponent", {
         function: "search",
         data: searchData,

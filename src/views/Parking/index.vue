@@ -1,90 +1,6 @@
 <template>
   <div>
-    <!-- 顶部搜索 -->
-    <div class="filter-form">
-      <el-row>
-        <el-col :span="21">
-          <el-form :inline="true" :model="form" class="demo-form-inline">
-            <el-form-item label="区域">
-              <CityArea
-                ref="cityArea"
-                :cityAreaValue.sync="form.area"
-                @callback="callbackComponent"
-              />
-            </el-form-item>
-            <el-form-item label="类型">
-              <el-select
-                v-model="form.type"
-                placeholder="请选择"
-                class="width-120"
-              >
-                <el-option
-                  v-for="item in parking_type"
-                  :label="item.label"
-                  :value="item.value"
-                  :key="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="禁启用">
-              <el-select
-                v-model="form.status"
-                placeholder="请选择"
-                class="width-120"
-              >
-                <el-option
-                  v-for="item in radio_disabled"
-                  :label="item.label"
-                  :value="item.value"
-                  :key="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="关键字">
-              <el-select
-                v-model="search_key"
-                placeholder="请选择"
-                class="width-120"
-              >
-                <el-option label="停车场名称" value="parkingName"></el-option>
-                <el-option label="详细区域" value="address"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-input
-                v-model="keyword"
-                placeholder="按Enter搜索"
-                @keyup.enter.native="search"
-              ></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="search">搜索</el-button>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="3">
-          <div class="pull-right">
-            <router-link to="/parkingAdd">
-              <el-button type="success">新增停车场</el-button>
-            </router-link>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-
-    <!-- 主表格 -->
     <TabalData ref="table" :config="table_config">
-      <!--禁启用-->
-      <template v-slot:status="slotData">
-        <el-switch
-          :disabled="slotData.data.id == switch_disabled"
-          @change="switchChange(slotData.data)"
-          v-model="slotData.data.status"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-        >
-        </el-switch>
-      </template>
       <!--查看地图-->
       <template v-slot:lnglat="slotData">
         <el-button type="success" size="mini" @click="showMap(slotData.data)"
@@ -97,11 +13,10 @@
 </template>
 <script>
 // 组件
-import CityArea from "@c/common/cityArea";
 import MapLocation from "@c/dialog/showMapLocation";
 import TabalData from "@c/tableData";
 // API
-import { ParkingDelete, ParkingStatus } from "@/api/parking";
+import { ParkingStatus } from "@/api/parking";
 // common
 import { address, parkingType } from "@/utils/common";
 export default {
@@ -128,8 +43,8 @@ export default {
           {
             label: "禁启用",
             prop: "status",
-            type: "slot",
-            slotName: "status",
+            type: "switch",
+            handler: (value, data) => this.switchChange(value, data),
           },
           {
             label: "查看位置",
@@ -142,9 +57,17 @@ export default {
             type: "operation",
             default: {
               deleteButton: true,
-              editButton: true,
-              editButtonLink: "ParkingAdd",
             },
+            buttonGroup: [
+              {
+                label: "编辑",
+                type: "danger",
+                event: "link",
+                name: "ParkingAdd",
+                key: "id",
+                value: "id",
+              },
+            ],
           },
         ],
         url: "parkingList", // 真实URL请求地址
@@ -152,62 +75,49 @@ export default {
           pageSize: 10,
           pageNumber: 1,
         },
-      },
-      // 筛选
-      form: {
-        area: "",
-        type: "",
-        status: "",
+        form_item: [
+          { label: "城市", type: "City" },
+          {
+            label: "关键字",
+            type: "Keyword",
+            options: ["parkingName", "address"],
+          },
+        ],
+        form_handler: [
+          {
+            label: "新增停车场",
+            prop: "add",
+            type: "success",
+            element: "link",
+            router: "/parkingAdd",
+          },
+        ],
+        form_config: {
+          searchButton: true,
+          resetButton: true,
+        },
       },
       switch_disabled: "",
-      //
-      search_key: "",
-      keyword: "",
-      // 禁启用
-      radio_disabled: this.$store.state.config.radio_disabled,
-      // 停车场类型
-      parking_type: this.$store.state.config.parking_type,
       // 地图显示
       map_show: false,
       parking_data: {},
       table_loading: false,
-      rowId: "",
     };
   },
-  components: { CityArea, MapLocation, TabalData },
+  components: { MapLocation, TabalData },
   methods: {
     callbackComponent(params) {
       if (params.function) {
         this[params.function](params.data);
       }
     },
-    /** search */
-    search() {
-      const requestData = {
-        pageSize: 10,
-        pageNumber: 1,
-      };
-      // 过滤筛选
-      const filterData = JSON.parse(JSON.stringify(this.form));
-      for (let key in filterData) {
-        if (filterData[key]) {
-          requestData[key] = filterData[key];
-        }
-      }
-      // 关键字
-      if (this.keyword && this.search_key) {
-        requestData[this.search_key] = this.keyword;
-      }
-      // 调用子组件的方法
-      this.$refs.table.requestData(requestData);
-    },
     /** 禁启用 */
-    switchChange(data) {
+    switchChange(value, data) {
       const requestData = {
         id: data.id,
         status: data.status,
       };
-      this.switch_disabled = data.id; // 第一种方式：组件本身的属性处理
+      this.switch_disabled = data.id;
       ParkingStatus(requestData)
         .then((response) => {
           this.$message({
@@ -217,8 +127,8 @@ export default {
           this.switch_disabled = "";
         })
         .catch((error) => {
+          console.log("switchChange error", error);
           this.switch_disabled = "";
-          this.switchChange(data);
         });
     },
     /** 显示地图 */

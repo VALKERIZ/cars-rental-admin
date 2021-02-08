@@ -8,7 +8,6 @@
     :options="cascader_options"
     :props="cascader_props"
     @change="changeValue"
-    :clearable="true"
   ></el-cascader>
 </template>
 
@@ -102,7 +101,7 @@ export default {
         const index = node.level - 1;
         this.address[index] = node.label;
       }
-      // 为 true 时，执行地图交互
+      // 为 true 时，执行地图定位交互
       if (this.mapLocation) {
         this.$emit("callback", {
           function: "setMapCenter",
@@ -113,6 +112,8 @@ export default {
       }
     },
     clear() {
+      this.initValueFlag = false;
+      this.initValue = "请选择省市区";
       this.value = "";
       this.$emit("update:cityAreaValue", this.value);
     },

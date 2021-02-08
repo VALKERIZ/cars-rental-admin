@@ -6,7 +6,6 @@
 </template>
 <script>
 // 组件
-import CityArea from "@c/common/cityArea";
 import MapLocation from "@c/dialog/showMapLocation";
 import TabalData from "@c/tableData";
 // API
@@ -141,7 +140,7 @@ export default {
       table_loading: false,
     };
   },
-  components: { CityArea, MapLocation, TabalData },
+  components: { MapLocation, TabalData },
   methods: {
     callbackComponent(params) {
       if (params.function) {
@@ -154,7 +153,7 @@ export default {
         id: data.id,
         status: data.status,
       };
-      this.switch_disabled = data.id; // 第一种方式：组件本身的属性处理
+      this.switch_disabled = data.id;
       CarsStatus(requestData)
         .then((response) => {
           this.$message({

@@ -1,9 +1,10 @@
 const state = {
+    // 搜索or列表->停车场类型
     parking_type_json: {
-        1: { label: "室内", value: 1 },
-        2: { label: "室外", value: 2 },
+        1: { label: "室内", value: "1" },
+        2: { label: "室外", value: "2" },
     },
-    // 停车场类型
+    // 新增or修改 ->停车场类型
     parking_type: [
         { label: "室内", value: 1 },
         { label: "室外", value: 2 },
