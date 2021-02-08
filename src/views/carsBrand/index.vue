@@ -15,7 +15,7 @@ import AddCarsBrand from "@c/dialog/addCarsBrand";
 // API
 import { BrandStatus } from "@/api/brand";
 export default {
-  name: "Parking",
+  name: "CarsBrand",
   components: { AddCarsBrand, TabalData },
   data() {
     return {

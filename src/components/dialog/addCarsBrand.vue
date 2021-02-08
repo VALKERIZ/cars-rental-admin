@@ -41,7 +41,7 @@ import Upload from "@c/upload";
 // API
 import { BrandLogo, BrandAdd, BrandEdit } from "@/api/brand";
 export default {
-  name: "",
+  name: "AddCarsBrand",
   components: { VueForm, Upload },
   props: {
     flagVisible: {

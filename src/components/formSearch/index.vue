@@ -78,7 +78,7 @@
 import CityArea from "@c/common/cityArea";
 import KeyWord from "@c/common/keyWord";
 export default {
-  name: "Form",
+  name: "FormSearch",
   components: { CityArea, KeyWord },
   props: {
     formItme: {

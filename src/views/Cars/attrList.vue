@@ -32,7 +32,7 @@ import { GetCarsTypeBasis, GetCarsTypeList } from "@/api/carsAttr";
 // common
 import { address, yearCheckType, energyType } from "@/utils/common";
 export default {
-  name: "Cars",
+  name: "CarsAttrlist",
   data() {
     return {
       // 表格配置

@@ -14,7 +14,7 @@ import addLeaseType from "@c/dialog/addLeaseType";
 // API
 import { LeaseStatus } from "@/api/lease";
 export default {
-  name: "Cars",
+  name: "Sale",
   data() {
     return {
       // 表格配置

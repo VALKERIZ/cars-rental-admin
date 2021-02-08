@@ -183,7 +183,7 @@ import { ParkingList } from "@/api/parking";
 // API
 import { CarsDelete } from "@/api/cars";
 export default {
-  name: "TableComponent",
+  name: "TableData",
   components: { FormSearch },
   data() {
     return {

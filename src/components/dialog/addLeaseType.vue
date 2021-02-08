@@ -22,7 +22,7 @@ import VueForm from "@c/form";
 // API
 import { LeaseAdd, LeaseEdit } from "@/api/lease";
 export default {
-  name: "",
+  name: "AddLeaseType",
   components: { VueForm },
   props: {
     flagVisible: {

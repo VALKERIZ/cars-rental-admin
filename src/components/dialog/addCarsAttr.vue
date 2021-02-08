@@ -23,7 +23,7 @@ import VueForm from "@c/form";
 // API
 import { CarsTypeAdd } from "@/api/carsAttr";
 export default {
-  name: "",
+  name: "AddCarsAttr",
   components: { VueForm },
   props: {
     flagVisible: {

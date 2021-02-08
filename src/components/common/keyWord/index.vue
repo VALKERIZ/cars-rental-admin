@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: "",
+  name: "KeyWork",
   components: {},
   data() {
     return {

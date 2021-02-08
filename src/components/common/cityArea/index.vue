@@ -15,7 +15,7 @@
 // API
 import { GetCity } from "@/api/common";
 export default {
-  name: "",
+  name: "CityArea",
   data() {
     const _this = this;
     return {

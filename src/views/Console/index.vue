@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "ConsoleIndex",
+  name: "Console",
   components: {},
   props: {},
   data() {

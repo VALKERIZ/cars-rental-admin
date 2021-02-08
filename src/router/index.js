@@ -163,7 +163,7 @@ const routes = [{
                     title: "会员编辑",
                 },
                 component: () =>
-                    import ("../views/Member/memberInfo.vue"),
+                    import ("../views/Member/info.vue"),
             },
         ],
     },

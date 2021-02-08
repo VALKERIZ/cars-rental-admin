@@ -24,7 +24,7 @@
 <script>
 import { computed } from "@vue/composition-api";
 export default {
-  name: "LayoutAsice",
+  name: "LayoutHeader",
   components: {},
   props: {},
   setup(props, { root }) {

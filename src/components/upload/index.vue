@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "",
+  name: "Upload",
   components: {},
   data() {
     return {
