@@ -14,7 +14,7 @@ import addLeaseType from "@c/dialog/addLeaseType";
 // API
 import { LeaseStatus } from "@/api/lease";
 export default {
-  name: "Sale",
+  name: "Lease",
   data() {
     return {
       // 表格配置
@@ -26,7 +26,7 @@ export default {
             label: "禁启状态",
             prop: "carsLeaseStatus",
             type: "switch",
-            handler: (value, data) => this.leasrStatus(value, data),
+            handler: (value, data) => this.leaseStatus(value, data),
           },
           { label: "描述", prop: "carsLeaseDesc" },
           // { label: "车辆列表", prop: "carsList", width: 500 },
@@ -48,8 +48,6 @@ export default {
           },
         ],
         url: "leaseList", // 真实URL请求地址
-        data: {},
-        form_item: [],
         form_handler: [
           {
             label: "新增租车类型",
@@ -59,7 +57,6 @@ export default {
             handler: () => this.leaseTypeAddDialog(),
           },
         ],
-        form_config: {},
       },
       current_cars_lease_data: {},
       // 弹窗标记
@@ -68,16 +65,16 @@ export default {
   },
   components: { TabalData, addLeaseType },
   methods: {
-    // callbackComponent(params) {
-    //   if (params.function) {
-    //     this[params.function](params.data);
-    //   }
-    // },
+    callbackComponent(params) {
+      if (params.function) {
+        this[params.function](params.data);
+      }
+    },
     loadData() {
       this.$refs.table.requestData();
     },
     // 禁启用
-    leasrStatus(value, data) {
+    leaseStatus(value, data) {
       LeaseStatus({ id: data.carsLeaseTypeId, status: value })
         .then((response) => {
           this.$message({
@@ -86,6 +83,7 @@ export default {
           });
         })
         .catch((error) => {
+          console.log("leaseStatus error", error);
           data.carsLeaseStatus = !value;
         });
     },

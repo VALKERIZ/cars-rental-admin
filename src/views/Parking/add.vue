@@ -1,5 +1,5 @@
 <template>
-  <div class="parking-add">
+  <div>
     <VueForm
       ref="vueForm"
       :formData="form_data"

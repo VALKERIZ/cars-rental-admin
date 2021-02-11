@@ -1,5 +1,5 @@
 <template>
-  <div class="parking-add">
+  <div>
     <VueForm
       ref="vueForm"
       :formData="form_data"
@@ -66,7 +66,7 @@
         />
       </template>
       <!-- 4.租赁价格 -->
-      <template v-slot:leaseList>
+      <template v-slot:lease>
         <el-row :gutter="20">
           <el-col
             :span="4"
@@ -203,7 +203,7 @@ export default {
         },
         {
           type: "Slot",
-          slotName: "leaseList",
+          slotName: "lease",
           prop: "lease",
           label: "租赁价格",
         },

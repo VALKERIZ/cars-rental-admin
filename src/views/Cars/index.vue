@@ -17,7 +17,7 @@ export default {
       // 表格配置
       table_config: {
         thead: [
-          { label: "车牌号", prop: "carsMode", width: 120 },
+          { label: "车牌号", prop: "carsNumber", width: 120 },
           { label: "车辆品牌", prop: "nameCh", width: 120 },
           {
             label: "车辆LOGO",

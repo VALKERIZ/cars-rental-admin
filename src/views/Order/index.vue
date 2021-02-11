@@ -23,12 +23,24 @@ export default {
       // 表格配置
       table_config: {
         thead: [
-          { label: "订单号", prop: "order_no" },
+          { label: "订单号", prop: "order_no", width: 290 },
+          {
+            label: "创建日期",
+            prop: "create_date",
+            type: "function",
+            width: 160,
+            callback: (row) => {
+              return row.create_date ? row.create_date : "";
+            },
+          },
+          { label: "车牌号", prop: "carsNumber", width: 100 },
+          { label: "车辆型号", prop: "carsMode", width: 100 },
+          { label: "租赁类型", prop: "carsLeaseTypeName", width: 80 },
+
           {
             label: "状态",
             prop: "order_status",
             type: "function",
-            width: 100,
             callback: (row) => {
               const orderStatus = this.$store.state.config.order_status;
               const status = orderStatus[row.order_status];
@@ -36,38 +48,33 @@ export default {
             },
           },
           {
-            label: "创建日期",
-            prop: "create_date",
+            label: "还车时间",
+            prop: "return_cars_date",
             type: "function",
-            width: 180,
+            width: 160,
             callback: (row) => {
-              return row.create_date ? row.create_date : "";
+              return row.return_cars_date ? row.return_cars_date : "";
             },
+          },
+          {
+            label: "预约人",
+            prop: "truename",
           },
           {
             label: "金额",
             prop: "amount",
-            width: 100,
           },
 
           {
             label: "操作",
             type: "operation",
-            width: 550,
+            width: 400,
             default: {
               // deleteButton: true,
               editButton: true,
               editButtonLink: "CarsAdd",
             },
             buttonGroup: [
-              {
-                label: "编辑",
-                type: "danger",
-                event: "link",
-                name: "CarsAdd",
-                key: "id",
-                value: "id",
-              },
               {
                 label: "待取车",
                 type: "",
@@ -103,7 +110,7 @@ export default {
         ],
         url: "orderList", // 真实URL请求地址
         data: {
-          pageSize: 10,
+          pageSize: 20,
           pageNumber: 1,
         },
         // 查询接口没有实现

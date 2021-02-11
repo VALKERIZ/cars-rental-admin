@@ -128,13 +128,13 @@ const routes = [{
         },
         component: Layout,
         children: [{
-            path: "/leaseList",
-            name: "LeaseList",
+            path: "/lease",
+            name: "Lease",
             meta: {
                 title: "租车类型",
             },
             component: () =>
-                import ("../views/Sale/leaseList.vue"),
+                import ("../views/Sale/lease.vue"),
         }, ],
     },
     // 会员管理

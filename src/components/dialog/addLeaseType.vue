@@ -111,22 +111,20 @@ export default {
     },
     close() {
       // 关闭窗口
-      this.dialogVisible = false;
       this.reset();
+      this.dialogVisible = false;
       this.$emit("update:flagVisible", false);
-      // 方法二：VUEx ->请求新数据
       this.$store.commit("common/SET_TABL_DATA_FLAG");
     },
   },
   watch: {
     flagVisible: {
-      handler(newValue, oldValue) {
+      handler(newValue) {
         this.dialogVisible = newValue;
       },
     },
     data: {
       handler(newValue) {
-        console.log(2222);
         this.form_data = newValue;
       },
     },

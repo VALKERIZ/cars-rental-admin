@@ -1,5 +1,5 @@
 <template>
-  <div class="parking-add">
+  <div>
     <VueForm
       ref="vuForm"
       :formData="form_data"
@@ -13,9 +13,33 @@
 import VueForm from "@c/form";
 // API
 import { Detailed, Edit } from "@/api/member";
+import { validate_phone, validate_idCard } from "@/utils/validate";
 export default {
   name: "MemberInfo",
   data() {
+    let validatePhone = (rule, value, callback) => {
+      let regPhone = validate_phone(value);
+      if (!value || value == "") {
+        callback(new Error("请输入用户名"));
+      } else if (!regPhone) {
+        callback(new Error("用户名格式有误"));
+      } else {
+        callback();
+      }
+    };
+    let validateIdCard = (rule, value, callback) => {
+      let regIdCard = validate_idCard(value);
+      if (!value || value == "") {
+        callback(new Error("请输入身份证"));
+      } else if (!regIdCard) {
+        callback(new Error("身份证格式有误"));
+      } else if (regIdCard == -1) {
+        callback(new Error("无效身份证"));
+      } else {
+        callback();
+      }
+    };
+
     return {
       // 表单数据配置
       id: this.$route.query.id,
@@ -40,8 +64,10 @@ export default {
           label: "用户名",
           placeholder: "请输入用户名",
           prop: "username",
-          required: true,
           width: "200px",
+          validator: [
+            { validator: validatePhone, trigger: "blur", required: true },
+          ],
         },
         {
           type: "Input",
@@ -56,7 +82,9 @@ export default {
           label: "身份证",
           placeholder: "请输入身份证",
           prop: "cardId",
-          required: true,
+          validator: [
+            { validator: validateIdCard, trigger: "blur", required: true },
+          ],
         },
         {
           type: "Radio",
@@ -75,38 +103,31 @@ export default {
           type: "Upload",
           label: "身份证（正面）",
           prop: "cardPhotoFace",
-          required: true,
+          // required: true,
         },
         {
           type: "Upload",
           label: "身份证（反面）",
           prop: "cardPhotoBack",
-          required: true,
+          // required: true,
         },
         {
           type: "Upload",
           label: "身份证（免冠）",
           prop: "cardPhotoBareheaded",
-          required: true,
+          // required: true,
         },
         {
           type: "Upload",
           label: "驾驶证（正面）",
           prop: "carsPhotoFace",
-          required: true,
+          // required: true,
         },
         {
           type: "Upload",
           label: "驾驶证（反面）",
           prop: "carsPhotoBack",
-          required: true,
-        },
-        {
-          type: "Radio",
-          label: "黑名单",
-          prop: "blacklist",
-          options: this.$store.state.config.blacklist,
-          required: true,
+          // required: true,
         },
       ],
       form_handler: [
@@ -126,7 +147,6 @@ export default {
   beforeMount() {
     this.id && this.detailed();
   },
-  mounted() {},
   methods: {
     detailed() {
       Detailed({ id: this.id }).then((response) => {

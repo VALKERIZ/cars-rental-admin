@@ -1,19 +1,10 @@
 <template>
   <div>
-    <!-- 表格数据 -->
-    <TabalData ref="table" :config="table_config">
-      <!--操作-->
-      <!-- <template v-slot:operation="slotData">
-        <el-button type="danger" size="small" :disabled="!slotData.data.blacklist"
-          >黑名单</el-button
-        >
-      </template> -->
-    </TabalData>
+    <TabalData ref="table" :config="table_config"> </TabalData>
   </div>
 </template>
 <script>
 import TabalData from "@c/tableData";
-
 // API
 import { AuthChange, AmountClear } from "@/api/member";
 
@@ -35,30 +26,26 @@ export default {
             prop: "truename",
             width: 150,
           },
-          {
-            label: "租车订单",
-            prop: "order",
-          },
+          // {
+          //   label: "租车订单",
+          //   prop: "order",
+          // },
           {
             label: "违章预存金",
             prop: "illegalAmount",
-            width: 100,
           },
           {
             label: "压金",
             prop: "gilding",
-            width: 100,
           },
           {
             label: "余额",
             prop: "amount",
-            width: 100,
           },
           {
             label: "实名认证",
             prop: "check_real_name",
             type: "switch",
-            width: 100,
             handler: (status, data) =>
               this.authChange(status, data, "identity"),
           },
@@ -66,22 +53,12 @@ export default {
             label: "驾驶证",
             prop: "check_cars",
             type: "switch",
-            width: 100,
             handler: (status, data) => this.authChange(status, data, "drive"),
           },
-          // {
-          //   label: "黑名单",
-          //   prop: "blacklist",
-          //   type: "function",
-          //   callback: (row) => {
-          //     return row.blacklist ? "是" : "-";
-          //   },
-          //   width: 100,
-          // },
           {
             label: "操作",
             type: "operation",
-            width: 200,
+            width: 300,
             buttonGroup: [
               {
                 event: "link",
@@ -139,7 +116,6 @@ export default {
     },
     // 金额清空
     amountClear(data) {
-      console.log(data);
       AmountClear({
         member_id: data.memberId,
       }).then((response) => {
