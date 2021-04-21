@@ -110,7 +110,7 @@ export default {
         ],
         url: "orderList", // 真实URL请求地址
         data: {
-          pageSize: 20,
+          pageSize: 40,
           pageNumber: 1,
         },
         // 查询接口没有实现

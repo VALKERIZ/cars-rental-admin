@@ -6,7 +6,7 @@ module.exports = {
     outputDir: process.env.NODE_ENV === "production" ? "dist" : "devdist",
     // eslint-loader 是否在保存的时候检查
     lintOnSave: false,
-    /** vue3.0内置了webpack所有东西，
+    /** vue-cli3.0内置了webpack所有东西，
      * webpack配置,see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
      **/
     chainWebpack: (config) => {
@@ -45,21 +45,22 @@ module.exports = {
             },
         },
     },
-    // use thread-loader for babel & TS in production build
-    // enabled by default if the machine has more than 1 cores
-    parallel: require("os").cpus().length > 1,
+    /** 是否为 Babel 或 TypeScript 使用 thread-loader。
+     *  该选项在系统的 CPU 有多于一个内核时自动启用，仅作用于生产构建
+     **/
+    // parallel: require("os").cpus().length > 1,
     /**
      *  PWA 插件相关配置,see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
      */
-    pwa: {},
+    // pwa: {},
     // webpack-dev-server 相关配置
     devServer: {
         open: false, // 编译完成是否打开网页
         host: "0.0.0.0", // 指定使用地址，默认localhost,0.0.0.0代表可以被外界访问
         port: 8080, // 访问端口
-        https: false, // 编译失败时刷新页面
+        https: false, // 使用https协议
         hot: true, // 开启热加载
-        hotOnly: false,
+        hotOnly: false,// 编译失败时刷新页面
         proxy: {
             [process.env.VUE_APP_API]: {
                 target: process.env.VUE_API_DEV_TARGET, //API服务器的地址

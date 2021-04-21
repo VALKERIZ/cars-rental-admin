@@ -23,7 +23,7 @@ const state = {
     gear: [
         { label: "手动", value: 1 },
         { label: "自动", value: 2 },
-        { label: "人工智能", value: 3 },
+        { label: "手自一体", value: 3 },
     ],
     // 能源类型
     energyType: [{
